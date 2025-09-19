@@ -1,0 +1,23 @@
+export const images = {
+    contact1: new URL('./images/contact1.jpg', import.meta.url).href,
+    contact2: new URL('./images/contact2.jpg', import.meta.url).href,
+    contact3: new URL('./images/contact3.jpeg', import.meta.url).href,
+    contact4: new URL('./images/contact4.webp', import.meta.url).href,
+    contact5: new URL('./images/villaBonitaPersonal.png', import.meta.url).href,
+    logo: new URL('./images/Google_logo.png', import.meta.url).href,
+    casacolorlogo: new URL('./images/casacolor-logo.png', import.meta.url).href,
+    polimixbolivialogo: new URL('./images/polimix-bolivia-logo.png', import.meta.url).href,
+    tumparlogo: new URL('./images/tumpar-logo.png', import.meta.url).href,
+    tcbrokerlogo: new URL('./images/tc-brokers-logo.jpeg', import.meta.url).href,
+    logovillabonita1: new URL('./images/logo.svg', import.meta.url).href,
+    logovillabonita2: new URL('./images/isologo-blanco.svg', import.meta.url).href,
+    logovillabonita3: new URL('./images/logo-blanco.svg', import.meta.url).href,
+    HistoriaMision: new URL('./images/HISTORIA-Y-VISION.png', import.meta.url).href,
+    imagecontact: new URL('./images/imagen-contactos.png', import.meta.url).href,
+    afiliates: new URL('./images/afiliates.jpg', import.meta.url).href,
+    altosvilla: new URL('./images/logotipoaltosvillabonita.svg', import.meta.url).href,
+    lagunamaggiore: new URL('./images/lagunamaggio.svg', import.meta.url).href,
+    paseovilla: new URL('./images/paseovillabonita.svg', import.meta.url).href,
+    constructora: new URL('./images/constructora.jpg', import.meta.url).href,
+    logovillaBonita: new URL('./images/logovillaBonita.png', import.meta.url).href
+} as const;
