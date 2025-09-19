@@ -75,7 +75,7 @@ const ConveniosPage = () => {
                 whileHover="hover"
               >
                 <img
-                  src={inst.photo}
+                  src={inst.photo || ''}
                   alt={inst.name}
                   className="h-24 object-contain"
                 />

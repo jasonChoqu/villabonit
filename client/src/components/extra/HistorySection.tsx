@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import layer45Image from "@/assets/images/Layer-52.png";
 import type { IHistory } from "@/core/types/IHistory";
-import { getAll, getAllPaginated } from "@/core/services/history/history.service"; // Import the service
+import { getAll } from "@/core/services/history/history.service"; // Import the service
 
 const HistorySection = () => {
   const [histories, setHistories] = useState<IHistory[]>([]);

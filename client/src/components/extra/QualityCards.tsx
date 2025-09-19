@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { FaStar, FaUserTie, FaChartLine, FaShapes, FaMapMarkedAlt } from 'react-icons/fa';
 import { QualityCard } from './QualityCard';
 import { motion } from 'framer-motion';

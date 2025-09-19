@@ -1,15 +1,13 @@
 import { motion } from "framer-motion";
-import BannerImg from "../../../../server/public/assets/banners/projects_default.png";
 import { images } from "@/assets/images";
 import Projects from "@/components/extra/ProjectsPrev";
 import ProjectsGallery from "@/components/extra/ProjectsGallery";
 import OtherProjects from "@/components/extra/OtherProjects";
 import { useEffect, useState } from "react";
 import { createApiService } from "@/core/services/api.service";
-import variables from "@/core/config/variables";
 
 const ProjectsPage = () => {
-  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
+  const [, setBannerUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -17,7 +15,7 @@ const ProjectsPage = () => {
         const ImageService = createApiService({ basePath: "banners" });
         console.log("wtf");
         const response = await ImageService.get("all");
-        setBannerUrl(`http://127.0.0.1:8000/${response.data.filter((item) => item.id === 2)[0].image}`);
+        setBannerUrl(`http://127.0.0.1:8000/${response.data.filter((item: any) => item.id === 2)[0].image}`);
       } catch {
         // silent fallback to default BannerImg
       }

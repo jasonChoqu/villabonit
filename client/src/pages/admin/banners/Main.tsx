@@ -6,7 +6,6 @@ import { Search, Edit } from "lucide-react";
 import Form from "./form";
 import { useResource } from "@/core/hooks/useResource";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
-import { toastify } from "@/core/utils/toastify";
 import useAuth from "@/core/hooks/useAuth";
 import DataTable from "@/components/table/DataTable";
 
@@ -84,7 +83,7 @@ export default function BannerList() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<IItemResource | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing] = useState(false);
   const [dialogConfig, setDialogConfig] = useState<{
     isOpen: boolean;
     title: string;
@@ -94,21 +93,6 @@ export default function BannerList() {
   } | null>(null);
 
   const { hasPermission } = useAuth();
-
-  const openDialog = (
-    title: string,
-    message: string,
-    onConfirm: () => void,
-    variant: "primary" | "danger" = "primary"
-  ) => {
-    setDialogConfig({
-      isOpen: true,
-      title,
-      message,
-      onConfirm,
-      variant,
-    });
-  };
 
   const closeDialog = () => {
     setDialogConfig(null);

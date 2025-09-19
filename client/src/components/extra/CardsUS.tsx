@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import CardsUSR from "./CardsUSR";
@@ -93,6 +93,6 @@ const CardsUS = () => {
 
 export default CardsUS;
 
-function setLoading(arg0: (prev: any) => any) {
+function setLoading(_: (prev: any) => any) {
   throw new Error("Function not implemented.");
 }

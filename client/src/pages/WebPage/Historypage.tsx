@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import UsPlan from "@/components/extra/UsPlan";
-import BannerImg from "../../../../server/public/assets/banners/us_default.png";
 import CardUS from "@/components/extra/CardsUS";
 import CardUS2 from "@/components/extra/CardsUS2";
 import Founders from "@/components/extra/founders";
@@ -11,20 +10,18 @@ import type { IBeginning } from "@/core/types/IBeginning";
 import type { IMoralValue } from "@/core/types/IMoralValue";
 import { useEffect, useState } from "react";
 import { createApiService } from "@/core/services/api.service";
-import variables from "@/core/config/variables";
 
 const Historypage = () => {
-  const [beginnings, setBeginnings] = useState<IBeginning[]>([]);
-  const [moralValues, setMoralValues] = useState<IMoralValue[]>([]);
-  const [loading, setLoading] = useState({
+  const [, setBeginnings] = useState<IBeginning[]>([]);
+  const [, setMoralValues] = useState<IMoralValue[]>([]);
+  const [, setLoading] = useState({
     beginnings: true,
     moralValues: true,
   });
-  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
+  const [, setBannerUrl] = useState<string | null>(null);
 
   const BeginningService = createApiService({ basePath: "beginnings" });
   const MoralValueService = createApiService({ basePath: "moral_values" });
-  const ImageService = createApiService({ basePath: "banners" });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,7 +57,7 @@ const Historypage = () => {
       const ImageService = createApiService({ basePath: "banners" });
       console.log("wtf");
       const response = await ImageService.get("all");
-      setBannerUrl(`http://127.0.0.1:8000/${response.data.filter((item) => item.id === 1)[0].image}`);
+      setBannerUrl(`http://127.0.0.1:8000/${response.data.filter((item: any) => item.id === 1)[0].image}`);
     } catch {
       // silent fallback to default BannerImg
     }

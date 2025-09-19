@@ -88,7 +88,7 @@ export default function ResourceBeginList() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewType, setPreviewType] = useState<"img" | "video" | "unknown">("unknown");
 
-  const { hasPermission } = useAuth();
+  const { hasPermission: _ } = useAuth();
 
   const openDialog = (
     title: string,

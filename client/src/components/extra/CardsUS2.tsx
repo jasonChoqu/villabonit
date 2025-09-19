@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 // client\src\components\extra\CardsUS2.tsx
@@ -9,7 +9,7 @@ import { createApiService } from "@/core/services/api.service";
 
 const CardsUS2 = () => {
   const [moralValues, setMoralValues] = useState<IMoralValue[]>([]);
-  const [loading, setLoading] = useState({
+  const [, setLoading] = useState({
     moralValues: true,
   });
 

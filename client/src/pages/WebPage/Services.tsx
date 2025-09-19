@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
 import { images } from "@/assets/images";
-import BannerImg from "../../../../server/public/assets/banners/services_default.png";
 
 import ServicesGallery from "@/components/extra/ServicesGallery";
 import { useEffect, useState } from "react";
 import { createApiService } from "@/core/services/api.service";
 
 const Servicepage = () => {
-  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
+  const [, setBannerUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBanner = async () => {
@@ -15,7 +14,7 @@ const Servicepage = () => {
         const ImageService = createApiService({ basePath: "banners" });
         console.log("wtf");
         const response = await ImageService.get("all");
-        setBannerUrl(`http://127.0.0.1:8000/${response.data.filter((item) => item.id === 3)[0].image}`);
+        setBannerUrl(`http://127.0.0.1:8000/${response.data.filter((item: any) => item.id === 3)[0].image}`);
       } catch {
         // silent fallback to default BannerImg
       }

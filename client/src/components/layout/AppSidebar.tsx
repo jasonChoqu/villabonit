@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
+import { images } from "@/assets/images";
 
 import {
   LayoutDashboard,
@@ -463,7 +464,7 @@ const AppSidebar: React.FC = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             "Colegio Topografos Cochabamba"
           ) : (
-            <img src={Logo} alt="Logo" width={32} height={32} />
+            <img src={images.logovillaBonita} alt="Logo" width={32} height={32} />
           )}
         </Link>
       </div>

@@ -3,18 +3,6 @@ import axios from '@/core/config/axios';
 import type { IApiResponse, IPaginationRequest } from '@/core/types/IApi';
 import type { IAgreementCreateRequest, IAgreementUpdateRequest } from '@/core/types/IAgreement';
 
-const hasBinary = (obj: any) =>
-  Object.values(obj ?? {}).some(v => (typeof File !== 'undefined' && v instanceof File) || v instanceof Blob);
-
-const toFormData = (payload: Record<string, any>) => {
-  const fd = new FormData();
-  Object.entries(payload).forEach(([k, v]) => {
-    if (v === undefined || v === null) return;
-    fd.append(k, v as any);
-  });
-  return fd;
-};
-
 // Obtener todos los acuerdos sin paginación
 export const getAll = async (): Promise<IApiResponse> => {
   const res = await axios.get('/v1/agreements/all');

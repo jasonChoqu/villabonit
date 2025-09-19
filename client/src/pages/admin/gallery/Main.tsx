@@ -108,7 +108,7 @@ export default function GalleryList() {
   const confirmDelete = (item: IItemResource) => {
     openDialog(
       "Confirmar eliminación",
-      `¿Estás seguro que deseas eliminar la imagen ${item.name}?`,
+      `¿Estás seguro que deseas eliminar la imagen ${item.description || 'esta imagen'}?`,
       () => handleDelete(item),
       "danger"
     );

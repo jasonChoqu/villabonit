@@ -1,5 +1,5 @@
 // ctb-main\client\src\components\extra\OptionsInHome.tsx
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
