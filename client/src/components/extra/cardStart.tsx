@@ -26,10 +26,11 @@ export default function CardStart() {
     try {
       const response = await images.get("all");
       console.log("responsee", response);
+      const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
       setCardData(
         response.data
           .map((item: IGallery) => ({
-            image: `http://127.0.0.1:8000/${String(item.photo).replace(/^\/+/, "")}`,
+            image: `${baseUrl}/${String(item.photo).replace(/^\/+/, "")}`,
             title: item.description,
             highlight: item.description2,
             area: item.area,

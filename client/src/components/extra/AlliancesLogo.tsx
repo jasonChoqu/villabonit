@@ -25,9 +25,10 @@ export default function AlliancesLogo() {
         if (!Array.isArray(data)) {
           console.error('La respuesta de la API no es un array:', data);
         }
+        const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
         const mapped = Array.isArray(data)
           ? data.map((item: any) => ({
-              image: `http://127.0.0.1:8000/${String(item.photo).replace(/^\/+/,'')}`,
+              image: `${baseUrl}/${String(item.photo).replace(/^\/+/,'')}`,
               title: item.name,
               highlight: item.description || "",
               area: item.area || "",

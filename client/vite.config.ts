@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/
+//https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -14,9 +14,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src')
     },
   },
-  base: '/',
+  base: '/app/',
   build: {
-    outDir: '../server/public',
+    outDir: '../server/public/app',
     emptyOutDir: true,
   },
 })

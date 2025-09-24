@@ -39,7 +39,7 @@ const columns = [
     render: (item: IItemResource) =>
       item.photo ? (
         <img
-          src={`http://127.0.0.1:8000/${String(item.photo).replace(/^\/+/, "")}`}
+          src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin}/${String(item.photo).replace(/^\/+/, "")}`}
           alt={item.description}
           className="w-10 h-10 object-cover rounded-md"
         />

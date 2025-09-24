@@ -65,9 +65,10 @@ export default function BannerList() {
   const [itemsState, setItemsState] = useState<IItemResource[]>(items as IItemResource[]);
   useEffect(() => {
     const itemsType: IItemResource[] = items as IItemResource[];
+    const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
     const nuevo = itemsType.map((item) => ({
       ...item,
-      image: `http://127.0.0.1:8000/${String(item.image).replace(/^\/+/, "")}`,
+      image: `${baseUrl}/${String(item.image).replace(/^\/+/, "")}`,
     }));
     setItemsState(nuevo as IItemResource[]);
   }, [items]);

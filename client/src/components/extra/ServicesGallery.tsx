@@ -27,10 +27,11 @@ export default function ServicesGallery() {
     try {
       const response = await images.get("all");
       console.log("responsee", response);
+      const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
       setLogosData(
         response.data
           .map((item: IGallery) => ({
-            image: `http://127.0.0.1:8000/${String(item.photo).replace(/^\/+/, "")}`,
+            image: `${baseUrl}/${String(item.photo).replace(/^\/+/, "")}`,
             alt: item.description,
 
             area: item.area,

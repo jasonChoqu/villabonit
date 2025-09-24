@@ -7,11 +7,15 @@ import QualityCards from "@/components/extra/QualityCards";
 import contactImage from "@/assets/images/contact1.jpg";
 import OptionsInHome from "@/components/extra/OptionsInHome";
 import VideoInHome from "@/components/extra/VideoInHome";
+
 import AlliancesLogo from "@/components/extra/AlliancesLogo";
 
 import BannerVideo from "@/assets/video/constructora.mp4";
+
+
+
 import React from "react";
-import { images } from "@/assets/images";
+
 
 // Servicio
 import { ResourceBeginService } from "@/core/services/resource-begin/resource-begin.service";
@@ -108,7 +112,7 @@ const HomePage = () => {
           style={{ lineHeight: 0, bottom: "-10rem" }} // <-- aquí
         >
           <img
-            src={images.logovillaBonita}
+            src="https://plazacomidas.s3.us-east-2.amazonaws.com/logoVillaBonita.png"
             alt="Villa Bonita Logo"
             className="h-[28rem] w-[28rem] md:h-[12rem] md:w-[12rem] lg:h-[36rem] lg:w-[36rem] object-contain drop-shadow-lg p-0 m-0 align-bottom"
             style={{ display: "block" }}

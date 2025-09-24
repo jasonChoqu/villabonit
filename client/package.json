@@ -1,5 +1,6 @@
 {
-  "name": "web-react-ts",
+ "homepage": "/",
+ "name": "web-react-ts",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +11,8 @@
     "start:production": "vite --mode production",
     "build": "tsc -b && vite build  --mode production && cp -R src/assets/images ../server/public/images",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:deploy": "react-scripts build && rm -rf ../server/public/app && mkdir -p ../server/public/app && cp -r build/* ../server/public/app/"
   },
   "dependencies": {
     "@ajoelp/json-to-formdata": "^1.5.0",
