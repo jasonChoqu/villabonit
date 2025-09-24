@@ -1,0 +1,20 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Pasar Authorization a PHP (tokens/bearer)
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # ===== React SOLO en /app =====
+    RewriteRule ^app/index\.html$ - [L]
+    RewriteCond %{REQUEST_URI} ^/app
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^app/?(.*)$ /app/index.html [L]
+
+    # ===== Laravel (API y web) =====
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
