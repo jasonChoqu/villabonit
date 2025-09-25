@@ -462,7 +462,7 @@ const AppSidebar: React.FC = () => {
       >
         <Link to="/" className="flex items-center gap-2 text-gray-400">
           {isExpanded || isHovered || isMobileOpen ? (
-            "Colegio Topografos Cochabamba"
+            "Constructora Villa Bonita"
           ) : (
             <img src={images.logovillaBonita} alt="Logo" width={32} height={32} />
           )}

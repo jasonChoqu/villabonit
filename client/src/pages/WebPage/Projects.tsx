@@ -30,7 +30,7 @@ const ProjectsPage = () => {
         <div className="absolute inset-0 group overflow-hidden">
           <img
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin}/assets/banners/projects_default.png`}
+            src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin}/assets/banners/proyects_default.png`}
             alt="Hero image"
           />
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-1/6 bg-gradient-to-t from-white/95 to-transparent" />
