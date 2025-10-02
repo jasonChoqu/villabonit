@@ -113,7 +113,7 @@ const HistorySection = () => {
                               <button
                                 type="button"
                                 onClick={() => setExpanded((prev) => ({ ...prev, [key]: !prev[key] }))}
-                                className="flex relative z-[9999] text-sm font-medium text-[#223c7a] underline underline-offset-2 hover:text-[#1a2e5c] focus:outline-none focus:ring-2 focus:ring-[#223c7a]/40 rounded"
+                                className="flex relative text-sm font-medium text-[#223c7a] underline underline-offset-2 hover:text-[#1a2e5c] focus:outline-none focus:ring-2 focus:ring-[#223c7a]/40 rounded"
                                 aria-expanded={isOpen}
                                 aria-label={isOpen ? "Ver menos" : "Leer más"}
                               >
