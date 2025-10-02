@@ -57,16 +57,13 @@ const HistorySection = () => {
     { scope: sectionsRef }
   );
 
-  // Determina si hay algún párrafo expandido
-  const anyExpanded = Object.values(expanded).some(Boolean);
-  // Margen inferior dinámico: grande solo si algo está expandido
-  const bottomMarginClass = anyExpanded ? "mb-40 md:mb-56" : "mb-16 md:mb-24";
-
   return (
-    <div className={`w-full overflow-hidden transition-[margin] duration-300 ${bottomMarginClass}`}>
+    <div className={`w-full overflow-hidden transition-[margin] duration-300 mb-8`}>
       <div className="relative">
-        <img src={layer45Image} alt="Layer 45" className="w-full h-auto object-cover" />
-        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-start px-6 md:px-16 py-12">
+        <div
+          className=" top-0 left-0 w-full h-full flex flex-col items-start px-6 md:px-16 py-12 "
+          style={{ backgroundImage: `url(${layer45Image})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 md:mb-10 text-[#223c7a] ">Nuestra historia</h2>
           <div ref={sectionsRef} className="w-full max-w-7xl space-y-10 md:space-y-14 bg-transparent mx-auto">
             {histories.length === 0 ? (
@@ -116,7 +113,7 @@ const HistorySection = () => {
                               <button
                                 type="button"
                                 onClick={() => setExpanded((prev) => ({ ...prev, [key]: !prev[key] }))}
-                                className="text-sm font-medium text-[#223c7a] underline underline-offset-2 hover:text-[#1a2e5c] focus:outline-none focus:ring-2 focus:ring-[#223c7a]/40 rounded"
+                                className="flex relative z-[9999] text-sm font-medium text-[#223c7a] underline underline-offset-2 hover:text-[#1a2e5c] focus:outline-none focus:ring-2 focus:ring-[#223c7a]/40 rounded"
                                 aria-expanded={isOpen}
                                 aria-label={isOpen ? "Ver menos" : "Leer más"}
                               >
@@ -132,6 +129,7 @@ const HistorySection = () => {
           </div>
         </div>
       </div>
+      <div className="relative z-10 -translate-y-16 w-full h-24 md:h-24 bg-gradient-to-t from-slate-50 to-transparent "></div>
     </div>
   );
 };
