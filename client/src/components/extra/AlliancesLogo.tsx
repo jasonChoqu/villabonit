@@ -1,8 +1,5 @@
-
-
-
 import { useEffect, useRef, useState } from "react";
-import { AgreementService } from '@/core/services/agreement/agreement.service';
+import { AgreementService } from "@/core/services/agreement/agreement.service";
 
 interface CardData {
   image: string;
@@ -18,26 +15,23 @@ export default function AlliancesLogo() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log('Llamando AgreementService.getAll()...');
         const res = await AgreementService.getAllPaginated();
-        console.log('Respuesta cruda de getAll:', res);
         const data = res.data || res || [];
         if (!Array.isArray(data)) {
-          console.error('La respuesta de la API no es un array:', data);
+          console.error("La respuesta de la API no es un array:", data);
         }
-        const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
+        const baseUrl = import.meta.env.VITE_API_URL?.replace("/api", "") || window.location.origin;
         const mapped = Array.isArray(data)
           ? data.map((item: any) => ({
-              image: `${baseUrl}/${String(item.photo).replace(/^\/+/,'')}`,
+              image: `${baseUrl}/${String(item.photo).replace(/^\/+/, "")}`,
               title: item.name,
               highlight: item.description || "",
               area: item.area || "",
             }))
           : [];
-        console.log('Mapped agreements:', mapped);
         setCardsData(mapped);
       } catch (e) {
-        console.error('Error al llamar a la API de acuerdos:', e);
+        console.error("Error al llamar a la API de acuerdos:", e);
         setCardsData([]);
       }
     };
@@ -70,29 +64,18 @@ export default function AlliancesLogo() {
   return (
     <div className="w-full relative overflow-x-hidden overflow-y-hidden py-12 bg-white">
       <div className="container mx-auto px-6">
-        <h2
-          className="text-3xl font-bold mb-12 text-center"
-          style={{ color: '#006C2E' }}
-        >
+        <h2 className="text-3xl font-bold mb-12 text-center" style={{ color: "#006C2E" }}>
           Alianzas que transforman
         </h2>
         <div className="relative w-full">
-          <div
-            ref={containerRef}
-            className="flex w-max gap-8 whitespace-nowrap"
-          >
-            {[...cardsData, ...cardsData].map((card, index) => (
+          <div ref={containerRef} className="flex w-max gap-8 whitespace-nowrap">
+            {[...cardsData, ...cardsData, ...cardsData, ...cardsData].map((card, index) => (
               <div
                 key={index}
-                className="relative flex-shrink-0 w-64 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-102 h-auto"
+                className="relative flex-shrink-0  rounded-lg overflow-hidden  transition-transform hover:scale-102 "
               >
-                <div className="h-80 w-full flex items-center justify-center bg-white">
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="w-full h-full object-contain"
-                    loading="lazy"
-                  />
+                <div className=" flex items-center justify-center bg-white">
+                  <img src={card.image} alt={card.title} className="w-full h-36  object-contain" loading="lazy" />
                 </div>
               </div>
             ))}
