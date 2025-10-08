@@ -34,17 +34,17 @@ const DirectivityModal = ({
     ? {
       name: initialData?.name || '',
       position: initialData?.position || '',
-      photo: initialData?.photo || '',
+      photo: initialData?.photo || null,
     }
     : {
       name: '',
       position: '',
-      photo: '',
+      photo: null,
     };
 
   const handleSubmit = async (data: FormValues) => {
     const cleanData = Object.fromEntries(
-      Object.entries(data).filter(([_, value]) => value != null)
+      Object.entries(data).filter(([_, value]) => value != null && value !== '')
     );
     if (isEditing) {
       await ItemService.update(initialData!.id, cleanData as IUpdateRequest)
@@ -101,8 +101,8 @@ const DirectivityModal = ({
           <div className="col-span-1">
             <InputFileField
               name="photo"
-              label="Fotografía"
-              helperText="Formatos aceptados: JPG, PNG (Máx. 4MB)"
+              label="Fotografía (Opcional)"
+              helperText="Formatos aceptados: JPG, PNG (Máx. 4MB) - Campo opcional"
             />
           </div>
         </div>

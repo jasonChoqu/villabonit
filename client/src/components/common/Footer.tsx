@@ -115,7 +115,7 @@ const Footer: React.FC = () => {
         {/* Columna derecha: datos desde API + redes */}
         <div className="flex-1 space-y-6 text-center md:text-left">
           <div>
-            <h3 className="text-3xl font-bold text-yellow-300 mb-6">Our Company</h3>
+            <h3 className="text-3xl font-bold text-yellow-300 mb-6">Nuestra Compañía</h3>
 
             <div className="space-y-4">
               {mainContact?.address && (

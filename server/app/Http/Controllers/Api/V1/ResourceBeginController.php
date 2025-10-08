@@ -60,58 +60,160 @@ class ResourceBeginController extends Controller
 
     public function store(StoreResourceBeginRequest $request): JsonResponse
     {
-        // (opcional) por si subes archivos grandes
-        ini_set('upload_max_filesize', '1024M');
-        ini_set('post_max_size', '1024M');
-        ini_set('max_execution_time', '300');
-        ini_set('max_input_time', '300');
-        ini_set('memory_limit', '1024M');
+        try {
+            // Log de inicio
+            \Log::info('🚀 Iniciando ResourceBegin store', [
+                'has_url_file' => $request->hasFile('url'),
+                'url_input' => $request->input('url') ? 'presente' : 'ausente',
+                'text' => $request->input('text'),
+                'has_logo_file' => $request->hasFile('logo_url'),
+            ]);
+            
+            // Configurar límites para archivos grandes
+            ini_set('upload_max_filesize', '2048M');
+            ini_set('post_max_size', '2048M');
+            ini_set('max_execution_time', '600');
+            ini_set('max_input_time', '600');
+            ini_set('memory_limit', '2048M');
+            
+            // Asegurar carpetas
+            File::ensureDirectoryExists(public_path($this->videoDirWeb));
+            File::ensureDirectoryExists(public_path($this->logoDirWeb));
+            
+            \Log::info('📁 Carpetas verificadas', [
+                'video_dir' => public_path($this->videoDirWeb),
+                'logo_dir' => public_path($this->logoDirWeb),
+            ]);
 
-        // Asegurar carpetas
-        File::ensureDirectoryExists(public_path($this->videoDirWeb));
-        File::ensureDirectoryExists(public_path($this->logoDirWeb));
+            $data = $request->validated();
+            \Log::info('✅ Datos validados', $data);
 
-        $data = $request->validated();
+            // --- VIDEO (campo 'url') ---
+            $videoPath = null;
+            if ($request->hasFile('url')) {
+                $videoFile = $request->file('url');
+                
+                \Log::info('📹 Procesando archivo de video', [
+                    'name' => $videoFile->getClientOriginalName(),
+                    'size' => $videoFile->getSize(),
+                    'mime' => $videoFile->getMimeType(),
+                    'extension' => $videoFile->getClientOriginalExtension(),
+                ]);
+                
+                // Validar que el archivo se subió correctamente
+                if (!$videoFile->isValid()) {
+                    \Log::error('❌ Archivo de video inválido', [
+                        'error' => $videoFile->getErrorMessage(),
+                        'error_code' => $videoFile->getError(),
+                    ]);
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error al subir el archivo: ' . $videoFile->getErrorMessage(),
+                    ], 422);
+                }
+                
+                // Validar tamaño del archivo (2GB máximo)
+                if ($videoFile->getSize() > 2 * 1024 * 1024 * 1024) {
+                    \Log::error('❌ Archivo demasiado grande', [
+                        'size' => $videoFile->getSize(),
+                        'max_size' => 2 * 1024 * 1024 * 1024,
+                    ]);
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El archivo es demasiado grande. Máximo 2GB permitido.',
+                    ], 422);
+                }
+                
+                $videoName = Str::uuid()->toString().'.'.$videoFile->getClientOriginalExtension();
+                $destinationPath = public_path($this->videoDirWeb);
+                
+                \Log::info('📁 Moviendo archivo', [
+                    'video_name' => $videoName,
+                    'destination' => $destinationPath,
+                ]);
+                
+                $moved = $videoFile->move($destinationPath, $videoName);
+                $videoPath = $this->videoDirWeb.'/'.$videoName;
+                
+                \Log::info('✅ Archivo movido exitosamente', [
+                    'path' => $videoPath,
+                    'moved' => $moved ? 'si' : 'no',
+                ]);
+                
+            } elseif ($this->isDataUrl($request->input('url'))) {
+                \Log::info('📹 Procesando Data URL');
+                $videoPath = $this->saveDataUrlToPublic($request->input('url'), $this->videoDirWeb);
+            }
 
-        // --- VIDEO (campo 'url') ---
-        $videoPath = null;
-        if ($request->hasFile('url')) {
-            $videoFile = $request->file('url');
-            $videoName = Str::uuid()->toString().'.'.$videoFile->getClientOriginalExtension();
-            $videoFile->move(public_path($this->videoDirWeb), $videoName);
-            $videoPath = $this->videoDirWeb.'/'.$videoName;
-        } elseif ($this->isDataUrl($request->input('url'))) {
-            $videoPath = $this->saveDataUrlToPublic($request->input('url'), $this->videoDirWeb);
+            // --- LOGO (campo 'logo_url') (opcional) ---
+            $logoPath = null;
+            if ($request->hasFile('logo_url')) {
+                $logoFile = $request->file('logo_url');
+                
+                \Log::info('🖼️ Procesando archivo de logo', [
+                    'name' => $logoFile->getClientOriginalName(),
+                    'size' => $logoFile->getSize(),
+                ]);
+                
+                if (!$logoFile->isValid()) {
+                    \Log::error('❌ Archivo de logo inválido', [
+                        'error' => $logoFile->getErrorMessage(),
+                    ]);
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error al subir el logo: ' . $logoFile->getErrorMessage(),
+                    ], 422);
+                }
+                
+                $logoName = Str::uuid()->toString().'.'.$logoFile->getClientOriginalExtension();
+                $logoFile->move(public_path($this->logoDirWeb), $logoName);
+                $logoPath = $this->logoDirWeb.'/'.$logoName;
+                
+                \Log::info('✅ Logo movido exitosamente', ['path' => $logoPath]);
+                
+            } elseif ($this->isDataUrl($request->input('logo_url'))) {
+                $logoPath = $this->saveDataUrlToPublic($request->input('logo_url'), $this->logoDirWeb);
+            }
+
+            // Persistir rutas (sin UploadedFile)
+            if ($videoPath !== null) $data['url'] = $videoPath;
+            if ($logoPath  !== null) $data['logo_url'] = $logoPath;
+
+            \Log::info('💾 Creando registro en base de datos', [
+                'url' => $data['url'] ?? null,
+                'text' => $data['text'] ?? null,
+                'logo_url' => $data['logo_url'] ?? null,
+            ]);
+
+            $item = ResourceBegin::create([
+                'url'      => $data['url']      ?? null,
+                'text'     => $data['text']     ?? null,
+                'logo_url' => $data['logo_url'] ?? null,
+            ]);
+
+            \Log::info('✅ ResourceBegin creado exitosamente', ['id' => $item->id]);
+
+            return (new ResourceBeginResource($item))
+                ->additional([
+                    'success' => true,
+                    'message' => 'Recurso creado correctamente',
+                ])
+                ->response()
+                ->setStatusCode(Response::HTTP_CREATED);
+                
+        } catch (\Exception $e) {
+            \Log::error('💥 Error en ResourceBegin store', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Error interno del servidor: ' . $e->getMessage(),
+            ], 500);
         }
-
-        // --- LOGO (campo 'logo_url') (opcional) ---
-        $logoPath = null;
-        if ($request->hasFile('logo_url')) {
-            $logoFile = $request->file('logo_url');
-            $logoName = Str::uuid()->toString().'.'.$logoFile->getClientOriginalExtension();
-            $logoFile->move(public_path($this->logoDirWeb), $logoName);
-            $logoPath = $this->logoDirWeb.'/'.$logoName;
-        } elseif ($this->isDataUrl($request->input('logo_url'))) {
-            $logoPath = $this->saveDataUrlToPublic($request->input('logo_url'), $this->logoDirWeb);
-        }
-
-        // Persistir rutas (sin UploadedFile)
-        if ($videoPath !== null) $data['url'] = $videoPath;
-        if ($logoPath  !== null) $data['logo_url'] = $logoPath;
-
-        $item = ResourceBegin::create([
-            'url'      => $data['url']      ?? null,
-            'text'     => $data['text']     ?? null,
-            'logo_url' => $data['logo_url'] ?? null,
-        ]);
-
-        return (new ResourceBeginResource($item))
-            ->additional([
-                'success' => true,
-                'message' => 'Recurso creado correctamente',
-            ])
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function update(UpdateResourceBeginRequest $request, $id): JsonResponse

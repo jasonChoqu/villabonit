@@ -29,26 +29,56 @@ export const getAll = async (): Promise<IApiResponse> => {
 };
 
 export const create = async (request: ResourceBeginCreatePayload): Promise<IApiResponse> => {
-  console.log(request);
+  console.log('📤 Iniciando subida de archivo:', {
+    videoSize: request.url.size,
+    videoName: request.url.name,
+    logoSize: request.logo_url?.size || 'N/A'
+  });
   
   const fd = new FormData();
   fd.append('url', request.url);
   if (request.logo_url) fd.append('logo_url', request.logo_url);
   if (request.text !== undefined && request.text !== null) fd.append('text', request.text);
 
-  const { data } = await axios.post(API_PREFIX, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+  const { data } = await axios.post(API_PREFIX, fd, { 
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 900000, // 15 minutos para videos grandes
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        const uploadedMB = Math.round(progressEvent.loaded / (1024 * 1024));
+        const totalMB = Math.round(progressEvent.total / (1024 * 1024));
+        console.log(`📊 Progreso de subida: ${percentCompleted}% (${uploadedMB}MB / ${totalMB}MB)`);
+      }
+    }
+  });
   return data;
 };
 
 export const update = async (id: number | string, request: ResourceBeginUpdatePayload): Promise<IApiResponse> => {
-    console.log(request);
+    console.log('🔄 Iniciando actualización de archivo:', {
+    videoSize: request.url?.size || 'No cambia',
+    videoName: request.url?.name || 'No cambia',
+    logoSize: request.logo_url?.size || 'N/A'
+  });
   const fd = new FormData();
   fd.append('_method', 'PUT');
   if (request.url) fd.append('url', request.url);
   if (request.logo_url) fd.append('logo_url', request.logo_url);
   if (request.text !== undefined) fd.append('text', request.text ?? '');
 
-  const { data } = await axios.post(`${API_PREFIX}/${id}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+  const { data } = await axios.post(`${API_PREFIX}/${id}`, fd, { 
+    headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 900000, // 15 minutos para videos grandes
+    onUploadProgress: (progressEvent) => {
+      if (progressEvent.total) {
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        const uploadedMB = Math.round(progressEvent.loaded / (1024 * 1024));
+        const totalMB = Math.round(progressEvent.total / (1024 * 1024));
+        console.log(`📊 Progreso de actualización: ${percentCompleted}% (${uploadedMB}MB / ${totalMB}MB)`);
+      }
+    }
+  });
   return data;
 };
 

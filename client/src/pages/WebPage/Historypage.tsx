@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import LogoImg from "@/assets/images/isologo-blanco.svg";
+
 import UsPlan from "@/components/extra/UsPlan";
 import CardUS from "@/components/extra/CardsUS";
 import CardUS2 from "@/components/extra/CardsUS2";
@@ -8,61 +10,130 @@ import HistorySection from "@/components/extra/HistorySection";
 import HistoryCarrusel from "@/components/extra/HistoryCarrusel";
 import type { IBeginning } from "@/core/types/IBeginning";
 import type { IMoralValue } from "@/core/types/IMoralValue";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createApiService } from "@/core/services/api.service";
 
 const Historypage = () => {
-  const [, setBeginnings] = useState<IBeginning[]>([]);
-  const [, setMoralValues] = useState<IMoralValue[]>([]);
-  const [, setLoading] = useState({
-    beginnings: true,
-    moralValues: true,
-  });
-  const [, setBannerUrl] = useState<string | null>(null);
+  const [beginnings, setBeginnings] = useState<IBeginning[]>([]);
+  const [moralValues, setMoralValues] = useState<IMoralValue[]>([]);
+  const [bannerUrl, setBannerUrl] = useState<string | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [triedFallback, setTriedFallback] = useState(false);
+  const isMountedRef = useRef(true);
+
+  const baseUrl = useMemo(
+    () => import.meta.env.VITE_API_URL?.replace("/api", "") || window.location.origin,
+    []
+  );
+  const defaultBanner = `${baseUrl}/assets/banners/us_default.png`;
 
   const BeginningService = createApiService({ basePath: "beginnings" });
   const MoralValueService = createApiService({ basePath: "moral_values" });
 
   useEffect(() => {
+    isMountedRef.current = true;
+    const fetchBanner = async () => {
+      try {
+        const ImageService = createApiService({ basePath: "banners" });
+        const response = await ImageService.get("all");
+        const bannerImage = response.data?.find?.((item: any) => item.id === 1);
+        if (isMountedRef.current) {
+          setBannerUrl(bannerImage ? `${baseUrl}/${bannerImage.image}` : defaultBanner);
+        }
+      } catch {
+        if (isMountedRef.current) setBannerUrl(defaultBanner);
+      } finally {
+        if (isMountedRef.current) setLoading(false);
+      }
+    };
+    
     const fetchData = async () => {
       try {
-        await Promise.all([getBeginnings(), getMoralValues(), getImage()]);
+        await Promise.all([fetchBanner(), getBeginnings(), getMoralValues()]);
       } catch (error) {
         console.error("Error loading data:", error);
+        if (isMountedRef.current) setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [baseUrl, defaultBanner]);
+
+  // Pre-carga: cuando cambia bannerUrl, resetea estados y marca loaded al terminar
+  useEffect(() => {
+    if (!bannerUrl) return;
+    setImageLoaded(false);
+    setImageError(false);
+    const img = new Image();
+    img.src = bannerUrl;
+    const onLoad = () => isMountedRef.current && setImageLoaded(true);
+    const onError = () => {
+      if (!isMountedRef.current) return;
+      // Si falla la imagen remota, intenta una sola vez el fallback
+      if (!triedFallback && bannerUrl !== defaultBanner) {
+        setTriedFallback(true);
+        setBannerUrl(defaultBanner);
+      } else {
+        setImageError(true);
+        setImageLoaded(true); // evita overlay infinito
+      }
+    };
+    img.addEventListener("load", onLoad);
+    img.addEventListener("error", onError);
+    return () => {
+      img.removeEventListener("load", onLoad);
+      img.removeEventListener("error", onError);
+    };
+  }, [bannerUrl, defaultBanner, triedFallback]);
 
   const getBeginnings = async () => {
     try {
       const response = await BeginningService.get("all");
-      setBeginnings(response.data);
-    } finally {
-      setLoading((prev) => ({ ...prev, beginnings: false }));
+      if (isMountedRef.current) setBeginnings(response.data);
+    } catch (error) {
+      console.error("Error loading beginnings:", error);
     }
   };
 
   const getMoralValues = async () => {
     try {
       const response = await MoralValueService.get("all");
-      setMoralValues(response.data);
-    } finally {
-      setLoading((prev) => ({ ...prev, moralValues: false }));
+      if (isMountedRef.current) setMoralValues(response.data);
+    } catch (error) {
+      console.error("Error loading moral values:", error);
     }
   };
-  const getImage = async () => {
-    try {
-      const ImageService = createApiService({ basePath: "banners" });
-      console.log("wtf");
-      const response = await ImageService.get("all");
-      const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
-      setBannerUrl(`${baseUrl}/${response.data.filter((item: any) => item.id === 1)[0].image}`);
-    } catch {
-      // silent fallback to default BannerImg
-    }
-  };
+
+  // Loader inicial SOLO por API
+  const LoaderScreen = () => (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 z-[9999]">
+      <motion.img
+        src={LogoImg}
+        alt="Logo Villa Bonita"
+        className="w-32 h-20 mb-6 object-contain"
+        initial={{ opacity: 0, scale: 0.3 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{
+          duration: 1.2,
+          ease: "easeOut",
+          scale: { type: "spring", stiffness: 120, damping: 15 },
+        }}
+        whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+      />
+      <p className="text-lg font-medium text-yellow-700 dark:text-yellow-300 animate-pulse text-center">
+        Construyendo tu experiencia digital…
+      </p>
+    </div>
+  );
+
+  if (loading) return <LoaderScreen />;
+
+  const imageSource = bannerUrl || defaultBanner;
 
   return (
     <div className="flex flex-col">
@@ -71,9 +142,44 @@ const Historypage = () => {
         <div className="absolute inset-0 group overflow-hidden">
           <img
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-            src={`${import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin}/assets/banners/us_default.png`}
+            src={imageSource}
             alt="Hero image"
+            // onLoad/onError del <img> quedan como respaldo;
+            // la pre-carga ya gestiona imageLoaded, pero esto cubre sustituciones dinámicas.
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              if (!triedFallback && imageSource !== defaultBanner) {
+                setTriedFallback(true);
+                setBannerUrl(defaultBanner);
+              } else {
+                setImageError(true);
+                setImageLoaded(true);
+              }
+            }}
+            style={{
+              opacity: imageLoaded ? 1 : 0,
+              transition: "opacity 0.5s ease-in-out",
+            }}
           />
+
+          {/* Overlay mientras la imagen carga */}
+          {!imageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+              <motion.img
+                src={LogoImg}
+                alt="Logo Villa Bonita"
+                className="w-24 h-16 object-contain"
+                initial={{ opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 1.2,
+                  ease: "easeOut",
+                  scale: { type: "spring", stiffness: 120, damping: 15 },
+                }}
+              />
+            </div>
+          )}
+
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-1/6 bg-gradient-to-t from-white/95 to-transparent" />
         </div>
 

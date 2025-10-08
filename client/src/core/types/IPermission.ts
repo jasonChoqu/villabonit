@@ -184,5 +184,19 @@ export type IPermission =
   | "gallery_ver"
   | "gallery_crear"
   | "gallery_editar"
-  | "gallery_eliminar";
-//
+  | "gallery_eliminar"
+
+  // Propuesta de Valor
+  | "propuesta_valor_listar"
+  | "propuesta_valor_ver"
+  | "propuesta_valor_crear"
+  | "propuesta_valor_editar"
+  | "propuesta_valor_eliminar"
+  | "propuesta_valor_restaurar"
+
+  // Project
+  | "project_listar"
+  | "project_ver"
+  | "project_crear"
+  | "project_editar"
+  | "project_eliminar";

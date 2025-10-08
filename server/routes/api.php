@@ -32,6 +32,8 @@ use App\Http\Controllers\Api\V1\CertificationController;
 use App\Http\Controllers\Api\V1\CertificationTemplateController;
 use App\Http\Controllers\Api\V1\ResourceBeginController;
 use App\Http\Controllers\Api\V1\GalleryController;
+use App\Http\Controllers\Api\V1\ValuePropositionController;
+use App\Http\Controllers\Api\V1\ProjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')
@@ -44,6 +46,7 @@ Route::prefix('/v1')
 
         Route::apiResource('agreements', AgreementController::class);
               
+
         //Route::get('resourcebegin/all', [ResourceBeginController::class, 'index']);
 
        // Route::post('resourcebegin/all', [ResourceBeginController::class, 'all']);
@@ -54,6 +57,7 @@ Route::prefix('/v1')
 
         Route::get('announcements/all', [AnnouncementController::class, 'all']); 
 
+        Route::get('directivities/all', [DirectivityController::class, 'all']);
 
         Route::get('beginnings/all', [BeginningController::class, 'all']);
 
@@ -72,16 +76,21 @@ Route::prefix('/v1')
         Route::get('gallery/all', [GalleryController::class, 'all']);
         Route::get('banners/all', [BannerController::class, 'all']);
 
-
-
         Route::get('moral_values/all', [MoralValueController::class, 'all']);
 
         Route::get('requirements/all', [RequirementController::class, 'all']);
 
         Route::get('social_networks/all', [SocialNetworkController::class, 'all']);
 
+        Route::get('value_propositions/all', [ValuePropositionController::class, 'all']);
+
+        Route::get('projects/all', [ProjectController::class, 'all']);
+
         Route::post('newsletters/send', [NewsletterController::class, 'send']);
 
+        Route::apiResource('value_propositions', ValuePropositionController::class);
+        Route::apiResource('projects', ProjectController::class);
+        
         Route::middleware(['auth:api'])->group(function () {
             Route::post('me', [AuthController::class, 'me']);
 
@@ -149,6 +158,8 @@ Route::prefix('/v1')
             Route::apiResource('faqs', faqController::class);
 
             Route::apiResource('social_networks', SocialNetworkController::class);
+
+            
 
             Route::apiResource('payment', PaymentController::class);
             Route::apiResource('gallery', GalleryController::class);

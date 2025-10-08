@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import { Menu, X, LogIn } from "lucide-react";
+import { motion } from "framer-motion";
 import LogoImg from "@/assets/images/isologo-blanco.svg";
+import { images } from "@/assets/images";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,11 +37,49 @@ const Header = () => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <img
-                src={LogoImg}
-                alt="Logo"
-                className="w-16 h-10 mr-4 object-contain transition-all duration-300"
-              />
+              {/* Logo dinámico que cambia con el scroll */}
+              <motion.div
+                key={scrolled ? "scrolled" : "transparent"} // Key para forzar re-render y animación
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="flex items-center"
+              >
+                {scrolled ? (
+                  // Logo para cuando hay scroll (logovillabonita1)
+                  <motion.img
+                    src={images.logovillabonita1}
+                    alt="Logo Villa Bonita"
+                    className="h-8 md:h-10 lg:h-12 w-auto mr-4 object-contain transition-all duration-300"
+                    loading="lazy"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  />
+                ) : (
+                  // Logo original para header transparente con efecto zoom
+                  <motion.img
+                    src={LogoImg}
+                    alt="Logo"
+                    className="w-16 h-10 mr-4 object-contain transition-all duration-300"
+                    initial={{ opacity: 0, scale: 0.3 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ 
+                      duration: 1.2,
+                      ease: "easeOut",
+                      scale: {
+                        type: "spring",
+                        stiffness: 120,
+                        damping: 15
+                      }
+                    }}
+                    whileHover={{ 
+                      scale: 1.1,
+                      transition: { duration: 0.2 }
+                    }}
+                  />
+                )}
+              </motion.div>
             </Link>
           </div>
 

@@ -19,7 +19,7 @@ class UpdateResourceBeginRequest extends FormRequest
                 'sometimes',
                 'file',
                 'mimetypes:image/*,video/*',
-                'max:204800', // 200 MB (KB)
+                'max:2097152', // 2GB (KB) = 2 * 1024 * 1024
             ],
 
             // Texto opcional
@@ -41,7 +41,7 @@ class UpdateResourceBeginRequest extends FormRequest
         return [
             'url.file'      => 'El archivo debe ser una imagen o un video válido.',
             'url.mimetypes' => 'El archivo debe ser de tipo imagen o video.',
-            'url.max'       => 'El archivo excede el tamaño máximo permitido (200 MB).',
+            'url.max'       => 'El archivo excede el tamaño máximo permitido (2GB).',
 
             'logo_url.file'  => 'El logo debe ser un archivo válido.',
             'logo_url.mimes' => 'El logo debe ser una imagen (png, jpg, jpeg, webp o svg).',

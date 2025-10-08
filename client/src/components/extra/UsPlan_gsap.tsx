@@ -1,15 +1,49 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import UsPlanCard from './UsPlanCard';
+import { DirectivityService } from '@/core/services/directivity/directivity.service';
+import type { IDirectivity } from '@/core/types/IDirectivity';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function UsPlan() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [directivityData, setDirectivityData] = useState<IDirectivity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Cargar datos de la directiva
+  useEffect(() => {
+    const loadDirectivityData = async () => {
+      try {
+        const response = await DirectivityService.getAll();
+        console.log('🔍 Respuesta completa de la API:', response);
+        console.log('📊 Datos de directividades:', response.data);
+        console.log('📈 Cantidad de directividades:', response.data?.length || 0);
+        setDirectivityData(response.data || []);
+      } catch (error) {
+        console.error('❌ Error loading directivity data:', error);
+        setDirectivityData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDirectivityData();
+  }, []);
+
+  // Crear highlights desde los datos de la directiva
+  const highlights = directivityData.map((member) => ({
+    label: `${member.position}:`,
+    value: member.name,
+  }));
+
+  // Imprimir highlights generados
+  console.log('🎯 Highlights generados:', highlights);
+  console.log('👥 Datos de directivityData:', directivityData);
 
   useGSAP(
     () => {
@@ -82,7 +116,9 @@ Fundada en el año 2011, nació como un sueño de su Gerente General, el Ing. Wi
 A partir del 2016 toma un giro para no sólo dedicarse al ámbito inmobiliario, sino también a la participación de proyectos civiles en otros sectores como clientes particulares y licitaciones públicas.
 
 Actualmente, contamos con varios proyectos terminados y entregados a clientes satisfechos, tanto privados como del ámbito público. Esto es gracias al gran equipo que conforma la Constructora, que no sólo son excelentes profesionales, sino que también son excelentes personas, compañeros y amigos.`}
-        highlights={[
+        highlights={loading ? [
+          { label: 'Cargando...', value: '' }
+        ] : highlights.length > 0 ? highlights : [
           { label: 'CEO:', value: 'Willmar Guzmán Justiniano' },
           { label: 'CFO:', value: 'Carlos Guzmán Justiniano' },
         ]}

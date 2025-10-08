@@ -16,7 +16,7 @@ class UpdateDirectivityRequest extends FormRequest
         return [
             'name' => 'required',
             'position' => 'required',
-            'photo' => 'required',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
         ];
     }
 }

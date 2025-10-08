@@ -15,8 +15,8 @@ class StoreDirectivityRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'position' => 'nullable',
-            'photo' => 'nullable',
+            'position' => 'required',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:4096',
         ];
     }
 }

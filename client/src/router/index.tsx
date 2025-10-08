@@ -63,6 +63,8 @@ import ProjectsPage from "@/pages/WebPage/Projects";
 import Servicepage from "@/pages/WebPage/Services";
 import ClientsList from "@/pages/admin/clients/Main";
 import GalleryList from "@/pages/admin/gallery/Main";
+import ValueProposition from "@/pages/admin/valueProposition/Main";
+import ProjectPage from "@/pages/admin/project/Main"; 
 
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -139,6 +141,8 @@ export default function App() {
               <Route path="/admin/resourcebegin" element={<ResourceBeginPage />} />
               <Route path="/admin/clientes" element={<ClientsList />} />
               <Route path="/admin/gallery" element={<GalleryList />} />
+              <Route path="/admin/propuestas_valor" element={<ValueProposition />} />
+              <Route path="/admin/proyectos" element={<ProjectPage />} />
             </Route>
           </Route>
 

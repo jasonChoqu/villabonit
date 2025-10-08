@@ -2,6 +2,8 @@ import * as yup from "yup";
 
 export const imageSchema = yup
   .mixed()
+  .nullable()
+  .optional()
   .test("file-size", "El tamaño máximo permitido es 4MB", (value) => {
     if (!value) return true;
 

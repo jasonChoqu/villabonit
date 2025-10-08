@@ -21,6 +21,7 @@ import {
   Home,
   BriefcaseBusiness,
   ImagePlay,
+  HelpCircle,
 } from "lucide-react";
 import { useSidebar } from "@/core/context/SidebarContext";
 import classNames from "classnames";
@@ -201,29 +202,113 @@ const navItems: MenuItem[] = [
 
 const webItems: MenuItem[] = [
   {
-    name: "LANDING PAGE",
-    icon: <Globe className="w-5 h-5" />,
+    name: "INICIO",
+    icon: <Home className="w-5 h-5" />,
     permissions: [
-      "historia_listar",
-      "contacto_listar",
-      "principio_listar",
-      "valor_moral_listar",
-      "directiva_listar",
-      "requisito_listar",
+      "red_social_listar",
+      "gallery_listar",
       "acuerdo_listar",
-      "consulta_listar",
-      "pregunta_frecuente_listar",
-      "red_social_listar",
       "banner_listar",
-      "red_social_listar",
     ],
     subItems: [
+      {
+        name: "Sección de Video y Texto",
+        path: "/admin/resourcebegin",
+        icon: <ImagePlay className="w-4 h-4" />,
+        permissions: ["red_social_listar"],
+      },
+      {
+        name: "Áreas de Especialización",
+        icon: <BriefcaseBusiness className="w-4 h-4" />,
+        permissions: ["gallery_listar"],
+        path: "/admin/gallery",
+      },
+      {
+        name: "Valores y Propósito",
+        icon: <Star className="w-4 h-4" />,
+        permissions: ["gallery_listar"],
+        path: "/admin/propuestas_valor",
+      },
+      {
+        name: "Alianzas que Transforman",
+        path: "/admin/acuerdos",
+        icon: <FileSignature className="w-4 h-4" />,
+        permissions: ["acuerdo_listar"],
+      },
+      {
+        name: "Banner Principal",
+        path: "/admin/banners",
+        icon: <Image className="w-4 h-4" />,
+        permissions: ["banner_listar"],
+      },
+    ],
+  },
+  {
+    name: "NOSOTROS",
+    icon: <Users className="w-5 h-5" />,
+    permissions: [
+      "directiva_listar",
+      "principio_listar",
+      "valor_moral_listar",
+      "historia_listar",
+    ],
+    subItems: [
+      {
+        name: "Fundadores",
+        path: "/admin/directiva",
+        icon: <Users className="w-4 h-4" />,
+        permissions: ["directiva_listar"],
+      },
+      {
+        name: "Visión y Misión",
+        path: "/admin/principios",
+        icon: <Scale className="w-4 h-4" />,
+        permissions: ["principio_listar"],
+      },
+      {
+        name: "Valores",
+        path: "/admin/valores_morales",
+        icon: <Star className="w-4 h-4" />,
+        permissions: ["valor_moral_listar"],
+      },
       {
         name: "Historia",
         path: "/admin/historias",
         icon: <History className="w-4 h-4" />,
         permissions: ["historia_listar"],
       },
+    ],
+  },
+  {
+    name: "PROYECTOS",
+    icon: <BriefcaseBusiness className="w-5 h-5" />,
+    permissions: [
+      "gallery_listar",
+      "project_listar",
+    ],
+    subItems: [
+      {
+        name: "Galería de Proyectos",
+        icon: <ImagePlay className="w-4 h-4" />,
+        permissions: ["gallery_listar"],
+        path: "/admin/gallery",
+      },
+      {
+        name: "Lista de Proyectos",
+        icon: <List className="w-4 h-4" />,
+        path: "/admin/proyectos",
+      },
+    ],
+  },
+  {
+    name: "CONFIGURACIÓN",
+    icon: <Globe className="w-5 h-5" />,
+    permissions: [
+      "contacto_listar",
+      "pregunta_frecuente_listar",
+      "red_social_listar",
+    ],
+    subItems: [
       {
         name: "Contacto",
         path: "/admin/contactos",
@@ -231,51 +316,15 @@ const webItems: MenuItem[] = [
         permissions: ["contacto_listar"],
       },
       {
-        name: "Principios",
-        path: "/admin/principios",
-        icon: <Scale className="w-4 h-4" />,
-        permissions: ["principio_listar"],
-      },
-      {
-        name: "Valores Morales",
-        path: "/admin/valores_morales",
-        icon: <Star className="w-4 h-4" />,
-        permissions: ["valor_moral_listar"],
-      },
-      {
-        name: "Directiva",
-        path: "/admin/directiva",
-        icon: <Users className="w-4 h-4" />,
-        permissions: ["directiva_listar"],
-      },
-      {
-        name: "Empresas estrategicas",
-        path: "/admin/acuerdos",
-        icon: <FileSignature className="w-4 h-4" />,
-        permissions: ["acuerdo_listar"],
-      },
-      // {
-      //   name: "Preguntas Frecuentes",
-      //   path: "/admin/preguntas_frecuentes",
-      //   icon: <HelpCircle className="w-4 h-4" />,
-      //   permissions: ["pregunta_frecuente_listar"]
-      // },
-      {
-        name: "Banner",
-        path: "/admin/banners",
-        icon: <Image className="w-4 h-4" />,
-        permissions: ["banner_listar"],
+        name: "Preguntas Frecuentes",
+        path: "/admin/preguntas_frecuentes",
+        icon: <HelpCircle className="w-4 h-4" />,
+        permissions: ["pregunta_frecuente_listar"],
       },
       {
         name: "Redes Sociales",
         path: "/admin/redes_sociales",
         icon: <Share2 className="w-4 h-4" />,
-        permissions: ["red_social_listar"],
-      },
-      {
-        name: "Pagina de Inicio",
-        path: "/admin/resourcebegin",
-        icon: <Home className="w-4 h-4" />,
         permissions: ["red_social_listar"],
       },
     ],

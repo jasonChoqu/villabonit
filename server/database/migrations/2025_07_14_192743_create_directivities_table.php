@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->required();
             $table->string('position')->required();
-            $table->text('photo')->required();
+            $table->text('photo')->nullable();
             $table->timestamps();
         });
     }

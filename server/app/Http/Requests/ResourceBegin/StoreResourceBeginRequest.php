@@ -19,7 +19,7 @@ class StoreResourceBeginRequest extends FormRequest
                 'required',
                 'file',
                 'mimetypes:image/*,video/*',
-                'max:204800', // 200 MB (KB)
+                'max:2097152', // 2GB (KB) = 2 * 1024 * 1024
             ],
             'text' => ['nullable', 'string', 'max:1000'],
             // Solo IMAGEN para el logo (opcional)
@@ -38,10 +38,10 @@ class StoreResourceBeginRequest extends FormRequest
             'url.required'   => 'Debes subir un archivo (imagen o video).',
             'url.file'       => 'El campo url debe ser un archivo válido.',
             'url.mimetypes'  => 'El archivo debe ser una imagen o un video.',
-            'url.max'        => 'El archivo excede el tamaño máximo permitido.',
+            'url.max'        => 'El archivo excede el tamaño máximo permitido (2GB).',
             'logo_url.file'  => 'El logo debe ser un archivo válido.',
             'logo_url.mimes' => 'El logo debe ser una imagen (png, jpg, jpeg, webp o svg).',
-            'logo_url.max'   => 'El logo excede el tamaño máximo permitido.',
+            'logo_url.max'   => 'El logo excede el tamaño máximo permitido (10MB).',
         ];
     }
 }

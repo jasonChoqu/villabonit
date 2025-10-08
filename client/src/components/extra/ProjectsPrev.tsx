@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { images } from "@/assets/images";
+import { ProjectService } from "@/core/services/project/project.service";
+import type { IProject } from "@/core/types/IProject";
 
 interface Project {
   id: number;
-  title: string; // Mantenemos title para referencia interna, pero no lo mostramos
+  title: string;
   description: string;
   logo: string;
   expandedContent: {
@@ -15,8 +17,11 @@ interface Project {
 
 const Projects = () => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const projects: Project[] = [
+  // Datos estáticos como fallback
+  const staticProjects: Project[] = [
     {
       id: 1,
       title: "Altos Villa Bonita",
@@ -25,7 +30,7 @@ const Projects = () => {
       expandedContent: {
         title: "Características del proyecto",
         paragraphs: [
-          "Numero de viviendas 32 departamentos (8 bloques de 4 unidades cada uno)                                                             ",
+          "Numero de viviendas 32 departamentos (8 bloques de 4 unidades cada uno)",
           "Superficie construida 3.840 m²",
           "Duracion del proyecto 18 meses",
           "ㅤ",
@@ -42,7 +47,7 @@ const Projects = () => {
       expandedContent: {
         title: "Características del proyecto",
         paragraphs: [
-          "Numero de viviendas 32 departamentos (8 bloques de 4 unidades cada uno)                                                             ",
+          "Numero de viviendas 32 departamentos (8 bloques de 4 unidades cada uno)",
           "Superficie construida 3.840 m²",
           "Duracion del proyecto 18 meses",
           "ㅤ",
@@ -59,7 +64,7 @@ const Projects = () => {
       expandedContent: {
         title: "Características del proyecto",
         paragraphs: [
-          "Numero de viviendas 32 departamentos (8 bloques de 4 unidades cada uno)                                                             ",
+          "Numero de viviendas 32 departamentos (8 bloques de 4 unidades cada uno)",
           "Superficie construida 3.840 m²",
           "Duracion del proyecto 18 meses",
           "ㅤ",
@@ -70,9 +75,58 @@ const Projects = () => {
     }
   ];
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await ProjectService.getAll();
+        const apiProjects: IProject[] = response.data;
+        
+        if (apiProjects && apiProjects.length > 0) {
+          // Transformar los datos de la API al formato necesario
+          const transformedProjects: Project[] = apiProjects.map(project => ({
+            id: project.id,
+            title: project.title,
+            description: project.description,
+            logo: project.image_url || images.altosvilla, // Usar imagen por defecto si no hay imagen
+            expandedContent: {
+              title: "Características del proyecto",
+              paragraphs: project.features
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0)
+            }
+          }));
+          
+          setProjects(transformedProjects);
+        } else {
+          // Si no hay datos de la API, usar datos estáticos
+          setProjects(staticProjects);
+        }
+      } catch (error) {
+        console.error("Error al cargar proyectos desde la API, usando datos estáticos:", error);
+        // En caso de error, usar datos estáticos
+        setProjects(staticProjects);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
   const toggleExpand = (id: number) => {
     setExpandedId(expandedId === id ? null : id);
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto py-12 px-4">
+        <div className="flex justify-center items-center min-h-[200px]">
+          <div className="text-lg text-gray-600">Cargando proyectos...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-4">
@@ -117,7 +171,7 @@ const Projects = () => {
                     {project.expandedContent.title}
                   </h4>
                   {project.expandedContent.paragraphs.map((paragraph, index) => (
-                    <p key={index} className="text-gray-600 last:mb-0">
+                    <p key={index} className="text-gray-600 mb-2 last:mb-0">
                       {paragraph}
                     </p>
                   ))}

@@ -7,6 +7,12 @@ export const getAllPaginated = async (params?: IPaginationRequest, config: { sig
   return res.data;
 }
 
+// Obtener todas las directividades sin paginación
+export const getAll = async (): Promise<IApiResponse> => {
+  const res = await axios.get('/v1/directivities/all');
+  return res.data;
+}
+
 export const create = async (request: IDirectivityCreateRequest): Promise<IApiResponse> => {
   const res = await axios.post('/v1/directivities', request);
   return res.data;
@@ -29,6 +35,7 @@ export const remove = async (id: any): Promise<IApiResponse> => {
 
 export const DirectivityService = {
   getAllPaginated,
+  getAll,
   create,
   update,
   get,
