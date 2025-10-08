@@ -45,7 +45,7 @@ const columns = [
   {
     key: "status",
     header: "Estado",
-    render: (item: IItemResource) => (
+    render: () => (
       <span className="badge badge-success">
         Activo
       </span>

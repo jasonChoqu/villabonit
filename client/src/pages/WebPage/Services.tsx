@@ -9,7 +9,7 @@ import { createApiService } from "@/core/services/api.service";
 const Servicepage = () => {
   const [bannerUrl, setBannerUrl] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [_imageError, setImageError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [triedFallback, setTriedFallback] = useState(false);
   const isMountedRef = useRef(true);

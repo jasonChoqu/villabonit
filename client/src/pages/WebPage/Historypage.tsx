@@ -8,17 +8,13 @@ import Founders from "@/components/extra/founders";
 import foundersImage from "@/assets/images/fundadores.png";
 import HistorySection from "@/components/extra/HistorySection";
 import HistoryCarrusel from "@/components/extra/HistoryCarrusel";
-import type { IBeginning } from "@/core/types/IBeginning";
-import type { IMoralValue } from "@/core/types/IMoralValue";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createApiService } from "@/core/services/api.service";
 
 const Historypage = () => {
-  const [beginnings, setBeginnings] = useState<IBeginning[]>([]);
-  const [moralValues, setMoralValues] = useState<IMoralValue[]>([]);
   const [bannerUrl, setBannerUrl] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
+  const [_imageError, setImageError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [triedFallback, setTriedFallback] = useState(false);
   const isMountedRef = useRef(true);
@@ -28,9 +24,6 @@ const Historypage = () => {
     []
   );
   const defaultBanner = `${baseUrl}/assets/banners/us_default.png`;
-
-  const BeginningService = createApiService({ basePath: "beginnings" });
-  const MoralValueService = createApiService({ basePath: "moral_values" });
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -49,16 +42,7 @@ const Historypage = () => {
       }
     };
     
-    const fetchData = async () => {
-      try {
-        await Promise.all([fetchBanner(), getBeginnings(), getMoralValues()]);
-      } catch (error) {
-        console.error("Error loading data:", error);
-        if (isMountedRef.current) setLoading(false);
-      }
-    };
-
-    fetchData();
+    fetchBanner();
     return () => {
       isMountedRef.current = false;
     };
@@ -90,24 +74,6 @@ const Historypage = () => {
       img.removeEventListener("error", onError);
     };
   }, [bannerUrl, defaultBanner, triedFallback]);
-
-  const getBeginnings = async () => {
-    try {
-      const response = await BeginningService.get("all");
-      if (isMountedRef.current) setBeginnings(response.data);
-    } catch (error) {
-      console.error("Error loading beginnings:", error);
-    }
-  };
-
-  const getMoralValues = async () => {
-    try {
-      const response = await MoralValueService.get("all");
-      if (isMountedRef.current) setMoralValues(response.data);
-    } catch (error) {
-      console.error("Error loading moral values:", error);
-    }
-  };
 
   // Loader inicial SOLO por API
   const LoaderScreen = () => (
