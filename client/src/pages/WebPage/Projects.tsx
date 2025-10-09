@@ -72,8 +72,8 @@ const ProjectsPage = () => {
   }, [bannerUrl, defaultBanner, triedFallback]);
 
   // Loader inicial SOLO por API
-  const LoaderScreen = () => (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 z-[9999]">
+ const LoaderScreen = () => (
+    <div className="flex flex-col items-center justify-center min-h-screen z-[9999]" style={{ backgroundColor: '#101828' }}>
       <motion.img
         src={LogoImg}
         alt="Logo Villa Bonita"

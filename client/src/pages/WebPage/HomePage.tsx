@@ -109,7 +109,7 @@ const HomePage = () => {
       <section ref={heroSectionRef} className="relative h-screen overflow-hidden">
         {/* Placeholder mientras carga el video */}
         {!isVideoLoaded && (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: '#101828' }}>
             <div className="text-white text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-300 mx-auto mb-4"></div>
               <p className="text-lg">Cargando experiencia...</p>

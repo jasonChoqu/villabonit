@@ -77,7 +77,7 @@ const Historypage = () => {
 
   // Loader inicial SOLO por API
   const LoaderScreen = () => (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 z-[9999]">
+    <div className="flex flex-col items-center justify-center min-h-screen z-[9999]" style={{ backgroundColor: '#101828' }}>
       <motion.img
         src={LogoImg}
         alt="Logo Villa Bonita"
@@ -130,7 +130,7 @@ const Historypage = () => {
 
           {/* Overlay mientras la imagen carga */}
           {!imageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+            <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: '#101828' }}>
               <motion.img
                 src={LogoImg}
                 alt="Logo Villa Bonita"

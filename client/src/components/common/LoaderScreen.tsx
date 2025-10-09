@@ -3,7 +3,7 @@ import LogoImg from "@/assets/images/isologo-blanco.svg";
 
 export default function LoaderScreen() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 z-9999">
+        <div className="flex flex-col items-center justify-center min-h-screen z-9999" style={{ backgroundColor: '#101828' }}>
             {/* Logo animado con efecto zoom */}
             <motion.img
                 src={LogoImg}
