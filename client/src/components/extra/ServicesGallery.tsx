@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { createApiService } from "@/core/services/api.service";
 import { type IGallery } from "@/core/types/IGallery";
+import { X } from "lucide-react";
 
 interface LogoData {
   image: string;
@@ -12,6 +13,7 @@ interface LogoData {
 
 export default function ServicesGallery() {
   const images = createApiService({ basePath: "gallery" });
+  const [selectedImage, setSelectedImage] = useState<LogoData | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -150,16 +152,84 @@ export default function ServicesGallery() {
             </div>
             
             {/* Sección de texto */}
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <p className="text-white text-sm md:text-base text-center font-bold">
-                {logo.alt} <br />
-              </p>
+            <div 
+              className="absolute bottom-0 left-0 right-0 p-3 cursor-pointer hover:bg-black/20 transition-all duration-200"
+              onClick={() => setSelectedImage(logo)}
+            >
+              <div className="text-white text-xs md:text-sm text-center font-bold leading-tight max-h-16 overflow-hidden">
+                <span className="block overflow-hidden text-ellipsis" style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  wordBreak: 'break-word'
+                }}>
+                  {logo.alt}
+                </span>
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
     </div>
   </div>
+
+  {/* Modal Popup */}
+  <AnimatePresence>
+    {selectedImage && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+        onClick={() => setSelectedImage(null)}
+      >
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.5, opacity: 0 }}
+          transition={{ type: "spring", damping: 20, stiffness: 300 }}
+          className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header del modal */}
+          <div className="flex justify-between items-center p-4 border-b border-gray-200">
+            <h3 className="text-lg font-bold text-gray-800">Información del Servicio</h3>
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={20} className="text-gray-600" />
+            </button>
+          </div>
+
+          {/* Contenido del modal */}
+          <div className="p-6">
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Imagen */}
+              <div className="md:w-1/2">
+                <img
+                  src={selectedImage.image}
+                  alt={selectedImage.alt}
+                  className="w-full h-64 md:h-80 object-cover rounded-lg"
+                />
+              </div>
+
+              {/* Información */}
+              <div className="md:w-1/2">
+              
+                
+                <div className="text-gray-700">
+                  <p className="text-base leading-relaxed text-gray-600 font-medium text-justify hyphens-auto break-words">
+                    {selectedImage.alt}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    )}
+  </AnimatePresence>
 </section>
   );
 }

@@ -23,9 +23,15 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const shouldBeTransparent = !scrolled && !isMenuOpen && location.pathname !== "/contacto";
+  const shouldBeTransparent = !scrolled && !isMenuOpen && location.pathname !== "/contacto" && location.pathname !== "/propiedades";
 
-  const headerBackground = location.pathname === "/contacto" ? "bg-[#F9EC56]" : shouldBeTransparent ? "bg-transparent" : "bg-white";
+  const headerBackground = location.pathname === "/contacto" 
+    ? "bg-[#F9EC56]" 
+    : location.pathname === "/propiedades" 
+      ? "bg-[#161515]" 
+      : shouldBeTransparent 
+        ? "bg-transparent" 
+        : "bg-white";
 
   return (
     <header
@@ -214,6 +220,7 @@ const menuItems = [
   { name: "Nosotros", path: "/historia" },
   { name: "Proyectos", path: "/projects" },
   { name: "Servicios", path: "/services" },
+  { name: "Propiedades a la venta", path: "/propiedades" },
   { name: "Contactanos", path: "/contacto" },
 ];
 

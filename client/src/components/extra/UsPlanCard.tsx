@@ -80,30 +80,32 @@ export default function UsPlanCard({ logo = "logo", title, content, highlights =
           ))}
         </div>
       )} */}
-      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-11 mt-12 overflow-hidden">
-        <div className="gsap-card md:col-span-5 mb-10 md:mb-0 ">
+      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-8 overflow-hidden">
+        <div className="gsap-card md:col-span-5 mb-6 md:mb-0">
           <CardsUSR
             title={highlights[0]?.label}
             content={highlights[0]?.value || ""}
             icon={FaBuildingUser}
             borderColor="border-[#223c7a]"
             textColor="text-[#223c7a]"
-            iconSize={70}
-            titleSize="text-4xl"
-            borderSize="border-4"
+            iconSize={40}
+            titleSize="text-xl"
+            borderSize="border-2"
           />
         </div>
 
-        <div className="gsap-card md:col-span-6">
+        <div className="md:col-span-2"></div>
+
+        <div className="gsap-card md:col-span-5">
           <CardsUSR
             title={highlights[1]?.label}
             content={highlights[1]?.value || ""}
             icon={FaUserTie}
             borderColor="border-[#223c7a]"
             textColor="text-[#223c7a]"
-            iconSize={70}
-            titleSize="text-4xl"
-            borderSize="border-4"
+            iconSize={40}
+            titleSize="text-xl"
+            borderSize="border-2"
           />
         </div>
       </div>

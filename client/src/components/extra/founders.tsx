@@ -67,8 +67,12 @@ const Founders: React.FC<FoundersProps> = ({ imageUrl }) => {
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
 
       {/* Capa de textos animados */}
-      <div ref={overlayRef} className="md:absolute inset-0 flex flex-col items-start justify-between p-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#223c7a]">Fundadores Zona Villa Bonita:</h2>
+      <div ref={overlayRef} className="md:absolute inset-0 flex flex-col items-start justify-between p-8 ">
+        <div className="w-full md:w-[60%] md:mr-auto md:relative md:-left-8 z-[9999]">
+          <div className="bg-[#fbd323] inset-0 py-5 md:py-8 md:rounded-r-2xl pr-[4.4rem] tracking-wide">
+            <h2 className="text-2xl md:text-3xl font-bold text-right text-[#1d1551]">Fundadores Zona Villa Bonita:</h2>
+          </div>
+        </div>
         <div className="md:translate-x-20 md:-translate-y-60 tracking-wide">
           <p className="text-xl md:text-3xl font-medium text-black">Dorian Guzman Rodriguez</p>
           <p className="text-xl md:text-3xl font-medium text-black">y Margoth Justiniano</p>

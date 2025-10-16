@@ -168,11 +168,29 @@ export default function CardStart() {
                 {/* Overlay negro semi-transparente */}
                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/60 to-transparent"></div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 bg-opacity-70 p-4">
-                <p className="text-white text-sm md:text-base text-center font-bold">
-                  {card.title} <br />
-                  <span className="text-yellow-300 px-1 font-extrabold">{card.highlight}</span>
-                </p>
+              <div className="absolute bottom-0 left-0 right-0 bg-opacity-70 p-3">
+                <div className="text-white text-xs md:text-sm text-center font-bold leading-tight max-h-16 overflow-hidden">
+                  <div className="mb-1">
+                    <span className="block overflow-hidden text-ellipsis" style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      wordBreak: 'break-word'
+                    }}>
+                      {card.title}
+                    </span>
+                  </div>
+                  <div className="text-yellow-300 font-extrabold text-xs md:text-sm">
+                    <span className="block overflow-hidden text-ellipsis" style={{
+                      display: '-webkit-box',
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: 'vertical',
+                      wordBreak: 'break-word'
+                    }}>
+                      {card.highlight}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

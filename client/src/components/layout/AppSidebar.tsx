@@ -111,6 +111,18 @@ const navItems: MenuItem[] = [
       },
     ],
   },
+
+  {
+    name: "Propiedades a la Ventas",
+    icon: <Home className="w-4 h-4" />,
+    subItems: [
+      {
+        name: "Lista de Propiedades", 
+        path: "/admin/properties",
+        icon: <List className="w-4 h-4" />,
+      },
+    ],
+  },
   /*
   {
     name: "Eventos",
@@ -232,6 +244,12 @@ const webItems: MenuItem[] = [
       {
         name: "Alianzas que Transforman",
         path: "/admin/acuerdos",
+        icon: <FileSignature className="w-4 h-4" />,
+        permissions: ["acuerdo_listar"],
+      },
+      {
+        name: "Video Contenido",
+        path: "/admin/videocontent",
         icon: <FileSignature className="w-4 h-4" />,
         permissions: ["acuerdo_listar"],
       },

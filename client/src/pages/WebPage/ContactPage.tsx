@@ -2,8 +2,35 @@ import { Mail, Phone, User, MessageCircle, Send } from 'lucide-react';
 import { motion } from "framer-motion";
 import { images } from "@/assets/images";
 import { HiChatAlt2 } from "react-icons/hi";
+import { useEffect, useState } from 'react';
+import { createApiService } from "@/core/services/api.service";
+import type { IGallery } from "@/core/types/IGallery";
 
 const ContactPage = () => {
+  const [contactImage, setContactImage] = useState<string>(images.imagecontact);
+  const galleryService = createApiService({ basePath: "gallery" });
+
+  useEffect(() => {
+    const fetchContactImage = async () => {
+      try {
+        const response = await galleryService.get("all");
+        const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
+        
+        // Buscar imagen con area "contacto"
+        const contactGalleryItem = response.data.find((item: IGallery) => item.area === "contacto");
+        
+        if (contactGalleryItem) {
+          const imageUrl = `${baseUrl}/${String(contactGalleryItem.photo).replace(/^\/+/, "")}`;
+          setContactImage(imageUrl);
+        }
+      } catch (error) {
+        console.error("Error loading contact image:", error);
+        // Mantener imagen por defecto en caso de error
+      }
+    };
+
+    fetchContactImage();
+  }, []);
   return (
     <div className="pt-24 pb-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
@@ -120,7 +147,7 @@ const ContactPage = () => {
             className="hidden lg:flex items-center justify-center"
           >
             <img
-              src={images.imagecontact}
+              src={contactImage}
               alt="Contacto"
               className="w-full h-auto transform hover:scale-105 transition-transform duration-300"
               style={{ 

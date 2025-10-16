@@ -33,6 +33,7 @@ const PrivateRoute = () => {
     "/admin/redes_sociales": ["red_social_listar"] as IPermission[],
     "/admin/certificaciones": ["certificacion_listar"] as IPermission[],
     "/admin/gallery": ["gallery_listar"] as IPermission[],
+    "/admin/properties": [] as IPermission[],
   };
 
   if (!isAuthenticated) {

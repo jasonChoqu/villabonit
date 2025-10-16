@@ -61,10 +61,13 @@ import LoaderScreen from "@/components/common/LoaderScreen";
 import { ToastContainer } from "react-toastify";
 import ProjectsPage from "@/pages/WebPage/Projects";
 import Servicepage from "@/pages/WebPage/Services";
+import PropertiesPage from "@/pages/propiedades/PropertiesPage";
 import ClientsList from "@/pages/admin/clients/Main";
 import GalleryList from "@/pages/admin/gallery/Main";
 import ValueProposition from "@/pages/admin/valueProposition/Main";
 import ProjectPage from "@/pages/admin/project/Main"; 
+import PropertyList from "@/pages/admin/property/PropertyList"; 
+import VideoContentList from "@/pages/admin/video-content/index";
 
 export default function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -108,6 +111,7 @@ export default function App() {
             <Route path="/formulario_solicitud" element={<Formulariopage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/services" element={<Servicepage />} />
+            <Route path="/propiedades" element={<PropertiesPage />} />
           </Route>
 
           {/* Dashboard Layout */}
@@ -143,6 +147,8 @@ export default function App() {
               <Route path="/admin/gallery" element={<GalleryList />} />
               <Route path="/admin/propuestas_valor" element={<ValueProposition />} />
               <Route path="/admin/proyectos" element={<ProjectPage />} />
+              <Route path="/admin/properties" element={<PropertyList />} />
+              <Route path="/admin/videocontent" element={<VideoContentList />} />
             </Route>
           </Route>
 

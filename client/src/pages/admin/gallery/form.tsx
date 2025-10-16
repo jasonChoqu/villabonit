@@ -170,6 +170,7 @@ const SliderModal = ({ isOpen, onClose, initialData = null, load }: GalleryModal
                 { label: "Inicio", value: "inicio" },
                 { label: "Proyectos", value: "proyectos" },
                 { label: "Servicios", value: "servicios" },
+                { label: "Contacto", value: "contacto" },
               ]}
               onChange={(e) => setControlArea(e.target.value)}
             />

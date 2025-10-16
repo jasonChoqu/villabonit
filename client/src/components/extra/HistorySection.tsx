@@ -58,10 +58,10 @@ const HistorySection = () => {
   );
 
   return (
-    <div className={`w-full overflow-hidden transition-[margin] duration-300 mb-8`}>
+    <div className={`w-full overflow-hidden transition-[margin] duration-300`}>
       <div className="relative">
         <div
-          className=" top-0 left-0 w-full h-full flex flex-col items-start px-6 md:px-16 py-12 "
+          className=" top-0 left-0 w-full h-full flex flex-col items-start px-2 md:px-16 py-12 "
           style={{ backgroundImage: `url(${layer45Image})`, backgroundSize: "cover", backgroundPosition: "center" }}
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 md:mb-10 text-[#223c7a] ">Nuestra historia</h2>
@@ -129,7 +129,7 @@ const HistorySection = () => {
           </div>
         </div>
       </div>
-      <div className="relative z-10 -translate-y-16 w-full h-24 md:h-24 bg-gradient-to-t from-slate-50 to-transparent "></div>
+    
     </div>
   );
 };
