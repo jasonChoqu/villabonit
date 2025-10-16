@@ -13,7 +13,7 @@ export const VideoContentStoreSchema = z.object({
     .min(1, { message: 'La URL del video es requerida' })
     .url({ message: 'Debe ser una URL válida' })
     .refine(
-      (url) => {
+      (url: string) => {
         // Validar que sea una URL de YouTube
         const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)[\w-]+/;
         return youtubeRegex.test(url);
@@ -42,7 +42,7 @@ export const VideoContentUpdateSchema = z.object({
     .min(1, { message: 'La URL del video es requerida' })
     .url({ message: 'Debe ser una URL válida' })
     .refine(
-      (url) => {
+      (url: string) => {
         const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)[\w-]+/;
         return youtubeRegex.test(url);
       },

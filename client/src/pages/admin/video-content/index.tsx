@@ -7,7 +7,6 @@ import Form from "./form";
 import { useResource } from "@/core/hooks/useResource";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { toastify } from "@/core/utils/toastify";
-import useAuth from "@/core/hooks/useAuth";
 import DataTable from "@/components/table/DataTable";
 
 const columns = [
@@ -132,8 +131,6 @@ export default function VideoContentList() {
     onConfirm: () => void;
     variant: "primary" | "danger";
   } | null>(null);
-
-  const { hasPermission } = useAuth();
 
   const openDialog = (
     title: string,
