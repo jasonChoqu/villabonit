@@ -34,6 +34,9 @@ use App\Http\Controllers\Api\V1\ResourceBeginController;
 use App\Http\Controllers\Api\V1\GalleryController;
 use App\Http\Controllers\Api\V1\ValuePropositionController;
 use App\Http\Controllers\Api\V1\ProjectController;
+use App\Http\Controllers\Api\V1\PropertyController;
+use App\Http\Controllers\Api\V1\PropertyVideoController;
+use App\Http\Controllers\Api\VideoContentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v1')
@@ -86,10 +89,24 @@ Route::prefix('/v1')
 
         Route::get('projects/all', [ProjectController::class, 'all']);
 
+        // Rutas públicas para video content
+        Route::get('video-content/main', [VideoContentController::class, 'getMainVideo']);
+        Route::get('video-content/active', [VideoContentController::class, 'getActiveVideos']);
+
         Route::post('newsletters/send', [NewsletterController::class, 'send']);
 
         Route::apiResource('value_propositions', ValuePropositionController::class);
         Route::apiResource('projects', ProjectController::class);
+        
+
+        Route::prefix('properties')->group(function () {
+                Route::get('/', [PropertyController::class, 'index'])->name('properties.index');
+                Route::post('/', [PropertyController::class, 'store'])->name('properties.store');
+                Route::get('/{id}', [PropertyController::class, 'show'])->name('properties.show');
+                Route::put('/{id}', [PropertyController::class, 'update'])->name('properties.update');
+                Route::delete('/{id}', [PropertyController::class, 'destroy'])->name('properties.destroy');
+                Route::post('/{id}/images', [PropertyController::class, 'uploadImages'])->middleware('large.files')->name('properties.upload-images');
+        });
         
         Route::middleware(['auth:api'])->group(function () {
             Route::post('me', [AuthController::class, 'me']);
@@ -167,6 +184,38 @@ Route::prefix('/v1')
             Route::prefix('certifications')->group(function () {
                 Route::apiResource('/', CertificationController::class)->parameters(['' => 'certification']);
             });
+
+            // Rutas para propiedades inmobiliarias
+            Route::prefix('properties')->group(function () {
+                Route::options('/', [PropertyController::class, 'options']);
+                Route::options('/{id}', [PropertyController::class, 'options']);
+                Route::options('/{id}/images', [PropertyController::class, 'options']);
+                Route::options('/{propertyId}/images/{imageId}', [PropertyController::class, 'options']);
+                
+                Route::get('/', [PropertyController::class, 'index'])->name('properties.index');
+                Route::post('/', [PropertyController::class, 'store'])->name('properties.store');
+                Route::get('/{id}', [PropertyController::class, 'show'])->name('properties.show');
+                Route::put('/{id}', [PropertyController::class, 'update'])->name('properties.update');
+                Route::delete('/{id}', [PropertyController::class, 'destroy'])->name('properties.destroy');
+                
+                // Rutas para manejo de imágenes
+                Route::post('/{id}/images', [PropertyController::class, 'uploadImages'])->name('properties.upload-images');
+                Route::get('/{propertyId}/images', [PropertyController::class, 'getPropertyImages'])->name('properties.get-images');
+                Route::delete('/{propertyId}/images/{imageId}', [PropertyController::class, 'deleteImage'])->name('properties.delete-image');
+                Route::put('/{propertyId}/images/{imageId}/featured', [PropertyController::class, 'setFeaturedImage'])->name('properties.set-featured-image');
+                Route::put('/{propertyId}/images/reorder', [PropertyController::class, 'reorderImages'])->name('properties.reorder-images');
+                
+                // Rutas para manejo de videos de YouTube
+                Route::get('/{propertyId}/videos', [PropertyVideoController::class, 'index'])->name('properties.get-videos');
+                Route::post('/{propertyId}/videos', [PropertyVideoController::class, 'store'])->name('properties.add-video');
+                Route::get('/{propertyId}/videos/{videoId}', [PropertyVideoController::class, 'show'])->name('properties.show-video');
+                Route::put('/{propertyId}/videos/{videoId}', [PropertyVideoController::class, 'update'])->name('properties.update-video');
+                Route::delete('/{propertyId}/videos/{videoId}', [PropertyVideoController::class, 'destroy'])->name('properties.delete-video');
+                Route::put('/{propertyId}/videos/reorder', [PropertyVideoController::class, 'reorder'])->name('properties.reorder-videos');
+            });
+
+            // Rutas protegidas para video content (admin)
+            Route::apiResource('video-content', VideoContentController::class);
 
            // Route::prefix('certification-templates')->group(function () {
            //     Route::apiResource('/', CertificationTemplateController::class)->parameters(['' => 'certification_template']);
