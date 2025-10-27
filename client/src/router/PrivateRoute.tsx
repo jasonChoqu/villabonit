@@ -23,6 +23,7 @@ const PrivateRoute = () => {
     "/admin/historias": ["historia_listar"] as IPermission[],
     "/admin/contactos": ["contacto_listar"] as IPermission[],
     "/admin/principios": ["principio_listar"] as IPermission[],
+    "/admin/linea_tiempo": ["linea_tiempo_listar"] as IPermission[],
     "/admin/valores_morales": ["valor_moral_listar"] as IPermission[],
     "/admin/directiva": ["directiva_listar"] as IPermission[],
     "/admin/requisitos": ["requisito_listar"] as IPermission[],

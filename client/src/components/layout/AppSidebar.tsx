@@ -22,6 +22,7 @@ import {
   BriefcaseBusiness,
   ImagePlay,
   HelpCircle,
+  GitPullRequest,
 } from "lucide-react";
 import { useSidebar } from "@/core/context/SidebarContext";
 import classNames from "classnames";
@@ -117,7 +118,7 @@ const navItems: MenuItem[] = [
     icon: <Home className="w-4 h-4" />,
     subItems: [
       {
-        name: "Lista de Propiedades", 
+        name: "Lista de Propiedades",
         path: "/admin/properties",
         icon: <List className="w-4 h-4" />,
       },
@@ -216,12 +217,7 @@ const webItems: MenuItem[] = [
   {
     name: "INICIO",
     icon: <Home className="w-5 h-5" />,
-    permissions: [
-      "red_social_listar",
-      "gallery_listar",
-      "acuerdo_listar",
-      "banner_listar",
-    ],
+    permissions: ["red_social_listar", "gallery_listar", "acuerdo_listar", "banner_listar"],
     subItems: [
       {
         name: "Sección de Video y Texto",
@@ -268,6 +264,7 @@ const webItems: MenuItem[] = [
       "directiva_listar",
       "principio_listar",
       "valor_moral_listar",
+      "linea_tiempo_listar",
       "historia_listar",
     ],
     subItems: [
@@ -290,6 +287,12 @@ const webItems: MenuItem[] = [
         permissions: ["valor_moral_listar"],
       },
       {
+        name: "Línea de tiempo",
+        path: "/admin/linea_tiempo",
+        icon: <GitPullRequest className="w-4 h-4" />,
+        permissions: ["linea_tiempo_listar"],
+      },
+      {
         name: "Historia",
         path: "/admin/historias",
         icon: <History className="w-4 h-4" />,
@@ -300,10 +303,7 @@ const webItems: MenuItem[] = [
   {
     name: "PROYECTOS",
     icon: <BriefcaseBusiness className="w-5 h-5" />,
-    permissions: [
-      "gallery_listar",
-      "project_listar",
-    ],
+    permissions: ["gallery_listar", "project_listar"],
     subItems: [
       {
         name: "Galería de Proyectos",
@@ -321,11 +321,7 @@ const webItems: MenuItem[] = [
   {
     name: "CONFIGURACIÓN",
     icon: <Globe className="w-5 h-5" />,
-    permissions: [
-      "contacto_listar",
-      "pregunta_frecuente_listar",
-      "red_social_listar",
-    ],
+    permissions: ["contacto_listar", "pregunta_frecuente_listar", "red_social_listar"],
     subItems: [
       {
         name: "Contacto",

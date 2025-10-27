@@ -43,6 +43,7 @@ import SocialNetworkPage from "@/pages/admin/social-networks/Main";
 
 import Historypage from "@/pages/WebPage/Historypage";
 import Directivapage from "@/pages/WebPage/DirectivePage";
+import TimeLinePage from "@/pages/admin/timeline/Main";
 import Requisitospage from "@/pages/WebPage/RequirementsPage";
 import Estatutospage from "@/pages/WebPage/StatutesPage";
 import Visionpage from "@/pages/WebPage/Visionpage";
@@ -65,8 +66,8 @@ import PropertiesPage from "@/pages/propiedades/PropertiesPage";
 import ClientsList from "@/pages/admin/clients/Main";
 import GalleryList from "@/pages/admin/gallery/Main";
 import ValueProposition from "@/pages/admin/valueProposition/Main";
-import ProjectPage from "@/pages/admin/project/Main"; 
-import PropertyList from "@/pages/admin/property/PropertyList"; 
+import ProjectPage from "@/pages/admin/project/Main";
+import PropertyList from "@/pages/admin/property/PropertyList";
 import VideoContentList from "@/pages/admin/video-content/index";
 
 export default function App() {
@@ -134,6 +135,7 @@ export default function App() {
               <Route path="/admin/contactos" element={<ContactAdminPage />} />
               <Route path="/admin/principios" element={<BeginningPage />} />
               <Route path="/admin/valores_morales" element={<MoralValuePage />} />
+              <Route path="/admin/linea_tiempo" element={<TimeLinePage />} />
               <Route path="/admin/directiva" element={<DirectivityAdminPage />} />
               <Route path="/admin/requisitos" element={<RequirementAdminPage />} />
               <Route path="/admin/acuerdos" element={<AgreementAdminPage />} />

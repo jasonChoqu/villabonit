@@ -94,6 +94,12 @@ export type IPermission =
   | "historia_editar"
   | "historia_eliminar"
 
+  // Línea de Tiempo
+  | "linea_tiempo_listar"
+  | "linea_tiempo_ver"
+  | "linea_tiempo_crear"
+  | "linea_tiempo_editar"
+
   // Valor Moral
   | "valor_moral_listar"
   | "valor_moral_ver"
