@@ -1,13 +1,12 @@
 import { useState } from "react";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
-import { MoralValueService as ItemService } from "@/core/services/moral-value/moral-value.service";
-import type { IMoralValue as IItemResource } from "@/core/types/IMoralValue";
+import { TimelineService as ItemService } from "@/core/services/timeline/timeline.service";
+import type { ITimeline as IItemResource } from "@/core/types/ITimeline";
 import { Search, Plus, Trash2, Edit } from "lucide-react";
 import Form from "./form";
 import { useResource } from "@/core/hooks/useResource";
 import { ConfirmDialog } from "@/components/common/ConfirmDialog";
 import { toastify } from "@/core/utils/toastify";
-import WithPermission from "@/components/common/WithPermission";
 import useAuth from "@/core/hooks/useAuth";
 import DataTable from "@/components/table/DataTable";
 
@@ -24,19 +23,35 @@ const columns = [
   },
   {
     key: "title",
-    header: "Titulo",
+    header: "Título",
     render: (item: IItemResource) => <div className="font-bold">{item.title}</div>,
     sortable: true,
   },
   {
     key: "description",
-    header: "Descripcion",
+    header: "Descripción",
     render: (item: IItemResource) => <div className="font-bold">{item.description}</div>,
     sortable: true,
   },
+  {
+    key: "image",
+    header: "Imagen",
+    render: (item: IItemResource) =>
+      item.photo ? (
+        <img
+          src={`${import.meta.env.VITE_API_URL?.replace("/api", "") || window.location.origin}/${String(
+            item.photo
+          ).replace(/^\/+/, "")}`}
+          alt={item.description}
+          className="w-10 h-10 object-cover rounded-md"
+        />
+      ) : (
+        <span className="text-gray-400">Sin imagen</span>
+      ),
+  },
 ];
 
-export default function TimeLineList() {
+export default function GalleryList() {
   const {
     items,
     loading,
@@ -95,7 +110,7 @@ export default function TimeLineList() {
   const confirmDelete = (item: IItemResource) => {
     openDialog(
       "Confirmar eliminación",
-      `¿Estás seguro que deseas eliminar el valor moral ${item.title}?`,
+      `¿Estás seguro que deseas eliminar la imagen ${item.description || "esta imagen"}?`,
       () => handleDelete(item),
       "danger"
     );
@@ -107,7 +122,7 @@ export default function TimeLineList() {
       toastify.success(response?.message || "Item eliminado");
       fetchItems();
     } catch (error) {
-      console.error("Error al eliminar el valor moral:", error);
+      console.error("Error al eliminar la imagen:", error);
     } finally {
       setIsProcessing(false);
       closeDialog();
@@ -120,21 +135,21 @@ export default function TimeLineList() {
       icon: <Edit className="w-4 h-4" />,
       onClick: (item: IItemResource) => handleEdit(item),
       variant: "primary" as const,
-      show: (item: IItemResource) => item.id && hasPermission("valor_moral_editar"),
+      show: (item: IItemResource) => item.id && hasPermission("gallery_editar"),
     },
     {
       label: "Eliminar",
       icon: <Trash2 className="w-4 h-4" />,
       onClick: (item: IItemResource) => confirmDelete(item),
       variant: "danger" as const,
-      show: (item: IItemResource) => item.id && hasPermission("valor_moral_eliminar"),
+      show: (item: IItemResource) => item.id && hasPermission("gallery_eliminar"),
     },
   ];
 
   const renderToolbar = () => (
     <div className="flex flex-col gap-4 w-full sm:flex-row sm:items-center sm:justify-between">
       <div className="flex gap-2">
-        <WithPermission permissions={["valor_moral_crear"]}>
+        {hasPermission("gallery_crear") && (
           <button
             className="bg-gray-600 text-white font-bold flex items-center gap-2 rounded-xl py-3 px-10 hover:bg-gray-700 hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
             onClick={() => {
@@ -145,7 +160,7 @@ export default function TimeLineList() {
             <Plus className="w-5 h-5" />
             Agregar
           </button>
-        </WithPermission>
+        )}
       </div>
       <div className="relative w-full sm:w-64">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-700 dark:text-gray-300">
@@ -164,7 +179,7 @@ export default function TimeLineList() {
 
   return (
     <div>
-      <PageBreadcrumb pageTitle="Línea de Tiempo" />
+      <PageBreadcrumb pageTitle="Línea de tiempo" />
       <DataTable
         data={items as IItemResource[]}
         columns={columns}
