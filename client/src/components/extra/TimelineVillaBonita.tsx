@@ -16,37 +16,6 @@ interface TimelineVillaBonitaProps {
   minGap?: number;
 }
 
-/* -------------------- Demo data -------------------- */
-export const timelineItemsFromImage: TimelineItem[] = [
-  {
-    year: "1999",
-    title: "Construcción de primeras viviendas",
-    description: "Se edifican las primeras viviendas, dando lugar a los primeros asentamientos familiares en la zona.",
-    image: "https://images.pexels.com/photos/2219024/pexels-photo-2219024.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    year: "2003",
-    title: "Inicio de urbanización",
-    description:
-      "El 18 de agosto comienzan las obras de urbanización de Villa Bonita, marcando el hito formal del proyecto.",
-    image: "https://images.pexels.com/photos/8354523/pexels-photo-8354523.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    year: "2004",
-    title: "Pavimentación de Vías Internas",
-    description:
-      "Se pavimentan las vías estructurales internas, mejorando la accesibilidad y conectividad del proyecto.",
-    image: "https://images.pexels.com/photos/259962/pexels-photo-259962.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-  {
-    year: "2007",
-    title: "Servicios Básicos y Constitución de la Cooperativa AGUAYSES",
-    description:
-      "Se instalan redes de energía eléctrica, alumbrado público y sistema de agua potable. Ese mismo año se constituye la Cooperativa AGUAYSES, que integra a los laborers con el alcantarillado, suministro y mantenimiento del agua.",
-    image: "https://images.pexels.com/photos/382177/pexels-photo-382177.jpeg?auto=compress&cs=tinysrgb&w=400",
-  },
-];
-
 /* -------------------- Component -------------------- */
 export default function TimelineVillaBonita({
   items,
@@ -65,7 +34,7 @@ export default function TimelineVillaBonita({
     () =>
       !items || items.length === 0
         ? []
-        : items.map((_, idx) => (items.length <= 1 ? 50 : (idx / (items.length - 1)) * 97)),
+        : items.map((_, idx) => (items.length <= 1 ? 50 : (idx / (items.length - 1)) * 100)),
     [items]
   );
 
@@ -78,37 +47,36 @@ export default function TimelineVillaBonita({
       className="relative mx-auto select-none bg-white px-8 my-12 "
       style={{ height, width: contentWidth, maxWidth: "100%" }}
     >
-      {/* Single timeline with alternating colors */}
-      <div className="absolute left-8 right-8 top-1/2 transform -translate-y-1/2">
+      {/* Colored track centered horizontally, constrained to left/right 8 */}
+      <div className="absolute left-8 right-8 top-1/2 -translate-y-1/2 h-[14px]">
         {items.map((_, idx) => {
           const segmentWidth = 100 / (items.length - 1);
           const isYellow = idx % 2 === 0;
-
-          if (idx === items.length - 1) return null; // Don't render last segment
-
+          if (idx === items.length - 1) return null;
           return (
             <div
               key={idx}
-              className={`absolute h-[14px] -top-[6px] ${isYellow ? "bg-[#FBD323]" : "bg-[#1d5e3c]"}`}
-              style={{
-                left: `${idx * segmentWidth}%`,
-                width: `${segmentWidth}%`,
-              }}
+              className={`absolute h-full ${isYellow ? "bg-[#FBD323]" : "bg-[#1d5e3c]"}`}
+              style={{ left: `${idx * segmentWidth}%`, width: `${segmentWidth}%` }}
             />
           );
         })}
       </div>
 
-      {/* Timeline items */}
-      {items.map((item, idx) => (
-        <TimelineItem
-          key={`${item.year}-${idx}`}
-          item={item}
-          position={positions[idx]}
-          isTop={idx % 2 === 0}
-          index={idx}
-        />
-      ))}
+      {/* Items container spans full height, but shares left/right 8 with the track */}
+      <div className="absolute inset-y-0 left-8 right-8">
+        <div className="relative w-full h-full">
+          {items.map((item, idx) => (
+            <TimelineItem
+              key={`${item.year}-${idx}`}
+              item={item}
+              position={positions[idx]}
+              isTop={idx % 2 === 0}
+              index={idx}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -131,22 +99,26 @@ const TimelineItem = ({ item, position, isTop, index }: TimelineItemProps) => {
         left: `${position}%`,
         transform: "translateX(-50%)",
         width: "280px",
-        marginLeft: "32px", // Account for the padding
+        // No extra margin needed; we are inside the track (left/right 8 applied to parent)
       }}
     >
       {/* Short vertical line with dot */}
-      {index % 2 === 0 ? (
-        <div className="absolute bg-gray-700 left-[50%] top-[73%] w-[2px] h-[350px] z-1 -translate-x-1/2 -translate-y-1/2" />
+      {index % 2 !== 0 ? (
+        // Even index: line goes upward from center
+        <div className="absolute bg-gray-700 left-[50%] bottom-[50%] w-[2px] h-[350px] z-1 -translate-x-1/2 translate-y-[5rem]" />
       ) : (
-        <div className="absolute bg-gray-700 left-[50%] top-[29%] w-[2px] h-[350px] z-1 -translate-x-1/2 -translate-y-1/2" />
+        // Odd index: line goes downward from center
+        <div className="absolute bg-gray-700 left-[50%] top-[50%] w-[2px] h-[350px] z-1 -translate-x-1/2 -translate-y-[5rem]" />
+      )}
+      {index % 2 !== 0 ? (
+        // Even index: line goes upward from center
+        <div className="absolute bg-gray-700 rounded-full top-[50%] left-[50%] -translate-x-1/2  w-2 h-2 z-10 translate-y-[5rem]" />
+      ) : (
+        // Odd index: line goes downward from center
+        <div className="absolute bg-gray-700 rounded-full top-[50%] left-[50%] -translate-x-1/2  w-2 h-2 z-10 -translate-y-[5rem]" />
       )}
 
       {/* Dot on timeline */}
-      {index % 2 === 0 ? (
-        <div className="absolute bg-gray-700 rounded-full top-[39%] left-[50%] -translate-x-1/2 -translate-y-4 w-2 h-2 z-10" />
-      ) : (
-        <div className="absolute bg-gray-700 rounded-full top-[67%] left-[50%] -translate-x-1/2 -translate-y-4 w-2 h-2 z-10" />
-      )}
 
       {/* Year text - alternating above and below */}
       <div

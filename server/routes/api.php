@@ -32,6 +32,7 @@ use App\Http\Controllers\Api\V1\CertificationController;
 use App\Http\Controllers\Api\V1\CertificationTemplateController;
 use App\Http\Controllers\Api\V1\ResourceBeginController;
 use App\Http\Controllers\Api\V1\GalleryController;
+use App\Http\Controllers\Api\V1\TimelineController;
 use App\Http\Controllers\Api\V1\ValuePropositionController;
 use App\Http\Controllers\Api\V1\ProjectController;
 use App\Http\Controllers\Api\V1\PropertyController;
@@ -77,6 +78,8 @@ Route::prefix('/v1')
 
         Route::get('histories/all', [HistoryController::class, 'all']);
         Route::get('gallery/all', [GalleryController::class, 'all']);
+    // Public route to fetch all timeline items (optional for frontend)
+    Route::get('timeline/all', [TimelineController::class, 'all']);
         Route::get('banners/all', [BannerController::class, 'all']);
 
         Route::get('moral_values/all', [MoralValueController::class, 'all']);
@@ -180,6 +183,7 @@ Route::prefix('/v1')
 
             Route::apiResource('payment', PaymentController::class);
             Route::apiResource('gallery', GalleryController::class);
+            Route::apiResource('timeline', TimelineController::class);
             Route::apiResource('banners', BannerController::class);  
             Route::prefix('certifications')->group(function () {
                 Route::apiResource('/', CertificationController::class)->parameters(['' => 'certification']);

@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
             'tipo_evento' => ['listar', 'ver', 'crear', 'editar', 'eliminar'],
             'principio' => ['listar', 'ver', 'crear', 'editar', 'eliminar'],
             'contacto' => ['listar', 'ver', 'crear', 'editar', 'eliminar'],
+            'linea_tiempo' => ['listar', 'ver', 'crear', 'editar', 'eliminar'],
             'historia' => ['listar', 'ver', 'crear', 'editar', 'eliminar'],
             'valor_moral' => ['listar', 'ver', 'crear', 'editar', 'eliminar'],
             'acuerdo' => ['listar', 'ver', 'crear', 'editar', 'eliminar'],
