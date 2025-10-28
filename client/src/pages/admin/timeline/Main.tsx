@@ -34,6 +34,12 @@ const columns = [
     sortable: true,
   },
   {
+    key: "year",
+    header: "Año",
+    render: (item: IItemResource) => <div className="font-bold">{item.year}</div>,
+    sortable: true,
+  },
+  {
     key: "image",
     header: "Imagen",
     render: (item: IItemResource) =>
