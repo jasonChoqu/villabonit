@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import TimelineVillaBonita from "./TimelineVillaBonita";
+import TimelineVillaBonita, { type TimelineItem } from "./TimelineVillaBonita";
+import { createApiService } from "@/core/services/api.service";
+import type { ITimeline } from "@/core/types/ITimeline";
 
 type Props = {
   items?: Array<{
     year: string;
     title: string;
-    subtitle?: string;
     description?: string;
     image: string;
   }>;
@@ -19,6 +20,8 @@ const HistoryCarrusel = ({ items = [], positions = 4, height = 600 }: Props) => 
   const [currentX, setCurrentX] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [apiItems, setApiItems] = useState<TimelineItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Lee tamaños en vivo
   const [containerW, setContainerW] = useState(0);
@@ -42,6 +45,39 @@ const HistoryCarrusel = ({ items = [], positions = 4, height = 600 }: Props) => 
       window.removeEventListener("resize", updateAll);
     };
   }, []);
+
+  // Base URL para recursos públicos
+  const baseUrl = useMemo(() => import.meta.env.VITE_API_URL?.replace("/api", "") || window.location.origin, []);
+
+  // Cargar datos desde la API de timeline (pública)
+  useEffect(() => {
+    let mounted = true;
+    const service = createApiService({ basePath: "timeline" });
+    (async () => {
+      try {
+        const res = await service.get("all");
+        const data: ITimeline[] = Array.isArray(res?.data) ? (res.data as ITimeline[]) : [];
+        // Mapear al formato del componente y ordenar por año asc
+        const mapped: TimelineItem[] = data
+          .map((it) => ({
+            year: String(it.year ?? ""),
+            title: String(it.title ?? ""),
+            description: String(it.description ?? ""),
+            image: it.photo ? `${baseUrl}/${String(it.photo).replace(/^\/+/, "")}` : "",
+          }))
+          .filter((it) => it.year && it.title);
+        mapped.sort((a, b) => (parseInt(a.year) || 0) - (parseInt(b.year) || 0));
+        if (mounted) setApiItems(mapped);
+      } catch {
+        if (mounted) setApiItems([]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [baseUrl]);
 
   const maxX = Math.max(0, contentW - containerW);
 
@@ -74,6 +110,19 @@ const HistoryCarrusel = ({ items = [], positions = 4, height = 600 }: Props) => 
 
   // Alto del timeline (no del carrusel) para que respire en pantallas chicas
   const timelineHeight = Math.min(Math.max(480, Math.round((containerW || 3900) * 0.32)), 520);
+
+  // Preferir props.items si vienen, normalizando al tipo TimelineItem; de lo contrario usar los de la API
+  const itemsFromProps: TimelineItem[] = useMemo(
+    () =>
+      (items || []).map((i) => ({
+        year: i.year,
+        title: i.title,
+        description: i.description ?? "",
+        image: i.image,
+      })),
+    [items]
+  );
+  const finalItems: TimelineItem[] = itemsFromProps.length > 0 ? itemsFromProps : apiItems;
 
   const activeIndex = useMemo(() => {
     if (positions <= 1 || maxX === 0) return 1;
@@ -114,12 +163,21 @@ const HistoryCarrusel = ({ items = [], positions = 4, height = 600 }: Props) => 
             <div ref={contentRef} className="h-full inline-block align-top bg-white">
               {/* El timeline ajusta su ancho en función de la cantidad de items */}
               <div className="h-full pr-8">
-                <TimelineVillaBonita
-                  items={demoItems}
-                  height={timelineHeight}
-                  minWidth={computedMinWidth}
-                  minGap={responsiveMinGap}
-                />
+                {loading ? (
+                  <div className="w-full text-center py-10 text-gray-500">Cargando línea de tiempo…</div>
+                ) : finalItems.length === 0 ? (
+                  <div className="w-full text-center py-10 text-gray-500 text-5xl">
+                    Aún no hay elementos en la línea de tiempo. Puedes agregarlos desde la configuración del panel de
+                    administración.
+                  </div>
+                ) : (
+                  <TimelineVillaBonita
+                    items={finalItems}
+                    height={timelineHeight}
+                    minWidth={computedMinWidth}
+                    minGap={responsiveMinGap}
+                  />
+                )}
               </div>
             </div>
           </motion.div>
@@ -203,70 +261,4 @@ function clamp(n: number, min: number, max: number) {
   return Math.min(Math.max(n, min), max);
 }
 
-export const demoItems = [
-  {
-    year: "1999",
-    title: "Inicio de urbanización",
-    subtitle: "",
-    description: "El 18 de agosto comienzan las obras en 'Paseo Villa Bonita' marcando el hito formal del proyecto.",
-    image: "https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2003",
-    title: "Construcción de primeras viviendas",
-    subtitle: "Se entregan las primeras viviendas, dando lugar a la primera comunidad establecida en la zona.",
-    description: "El 18 de agosto comienzan las obras en 'Paseo Villa Bonita' marcando el hito formal del proyecto.",
-    image: "https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2004",
-    title: "Pavimentación de vías internas",
-    subtitle: "",
-    description:
-      "Se pavimentan los ejes estructurales internos mejorando la accesibilidad y conectividad del proyecto.",
-    image: "https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2007",
-    title: "Servicios básicos y Cooperativa Aguasys",
-    subtitle: "",
-    description:
-      "Instalación de redes de agua y alcantarillado, gestión comunitaria de abastecimiento y mantenimiento.",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2008",
-    title: "Proyecto Condominio Acarai",
-    subtitle: "",
-    description: "Se lanza el plan habitacional con enfoque vecinal y áreas comunes.",
-    image: "https://images.unsplash.com/photo-1502005229762-cf1b2da7c52f?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2011",
-    title: "Fundación de la Constructora Villa Bonita",
-    subtitle: "",
-    description: "Se crea la unidad constructora para ejecutar y administrar nuevos desarrollos del complejo.",
-    image: "https://images.unsplash.com/photo-1560185008-b033106af2b8?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2012",
-    title: "Proyecto Casas WAR y Casas 4K",
-    subtitle: "",
-    description: "Líneas de vivienda con eficiencia espacial y acabados optimizados.",
-    image: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2018",
-    title: "Proyecto Condominio Laguna Maggiore",
-    subtitle: "",
-    description: "Conjunto con áreas verdes y senderos peatonales arbolados.",
-    image: "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=400&auto=format&fit=crop",
-  },
-  {
-    year: "2020",
-    title: "Proyecto Condominio Paseo de Villa Bonita",
-    subtitle: "",
-    description: "Nueva etapa del desarrollo con vivienda compacta y terrazas.",
-    image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=400&auto=format&fit=crop",
-  },
-];
+// demoItems eliminado: ahora el componente consume datos reales de la API
